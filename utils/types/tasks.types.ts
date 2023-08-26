@@ -5,6 +5,7 @@ export enum TaskStatus {
 }
 
 export interface ITask {
+  id: number;
   text: string;
   status: TaskStatus;
 }
