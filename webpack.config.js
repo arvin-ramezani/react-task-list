@@ -42,11 +42,11 @@ module.exports = {
         exclude: /node_modules/,
         use: ["file-loader"],
       },
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: ["babel-loader", "ts-loader"],
-      },
+      // {
+      //   test: /\.tsx?$/,
+      //   exclude: /node_modules/,
+      //   use: ["babel-loader", "ts-loader"],
+      // },
     ],
   },
 };
