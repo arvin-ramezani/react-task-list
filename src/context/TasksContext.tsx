@@ -6,8 +6,8 @@ import React, {
   useReducer,
 } from "react";
 
-import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
-import { createId } from "../../../utils/helpers/createId";
+import { ITask, TaskStatus } from "../../utils/types/tasks.types";
+import { createId } from "../../utils/helpers/createId";
 
 interface IInitialTasksState {
   todoList: ITask[];
@@ -235,23 +235,19 @@ const useTasksContext = (initialState: IInitialTasksState) => {
 
   const doneTask = useCallback(
     (taskToDonePayload: { id: ITask["id"]; currentStatus: TaskStatus }) => {
-      setTimeout(() => {
-        dispatch({
-          type: TasksReducerActionTypes.DONE_TASK,
-          payload: taskToDonePayload,
-        });
-      }, 3000);
+      dispatch({
+        type: TasksReducerActionTypes.DONE_TASK,
+        payload: taskToDonePayload,
+      });
     },
     []
   );
 
   const undoneTask = useCallback((taskToUndonePayload: { id: ITask["id"] }) => {
-    setTimeout(() => {
-      dispatch({
-        type: TasksReducerActionTypes.UNDONE_TASK,
-        payload: taskToUndonePayload,
-      });
-    }, 3000);
+    dispatch({
+      type: TasksReducerActionTypes.UNDONE_TASK,
+      payload: taskToUndonePayload,
+    });
   }, []);
 
   const editTask = useCallback(

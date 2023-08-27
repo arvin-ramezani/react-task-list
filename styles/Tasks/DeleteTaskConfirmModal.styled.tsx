@@ -13,8 +13,10 @@ export const StyledDeleteTask = styled.div<{ status: TaskStatus }>`
   z-index: 1;
   font-size: 0.75rem;
   font-weight: 600;
+  background-color: #fff;
 
-  background-color: ${({ theme, status }) => theme.colors[status].background};
+  /* background-color: ${({ theme, status }) =>
+    theme.colors[status].background}; */
   color: ${({ theme, status }) => theme.colors[status].cta};
 
   & button {

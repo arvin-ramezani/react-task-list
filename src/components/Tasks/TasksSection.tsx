@@ -9,7 +9,7 @@ import TaskListHeader from "./TaskListHeader";
 import { SectionContainer } from "../../../styles/common/SectionContainer";
 import { TaskStatus } from "../../../utils/types/tasks.types";
 import { TASKS_LIST } from "../../../utils/dummy-data";
-import { useTasks } from "./TasksContext";
+import { useTasks } from "../../context/TasksContext";
 
 function TasksSection() {
   const { addAllTasks, todoList, doingList, doneList } = useTasks();

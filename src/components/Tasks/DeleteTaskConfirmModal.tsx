@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
-import { StyledDeleteTask } from "../../../styles/Tasks/DeleteTaskConfirmModal";
+import { StyledDeleteTask } from "../../../styles/Tasks/DeleteTaskConfirmModal.styled";
 
 interface DeleteTaskConfirmModalProps {
   status: TaskStatus;

@@ -7,7 +7,7 @@ import theme from "../utils/theme";
 import {
   TasksContextProvider,
   initialTasksState,
-} from "./components/Tasks/TasksContext";
+} from "./context/TasksContext";
 
 function App() {
   return (
