@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import TasksList from "./TasksList";
 import {
@@ -9,11 +9,14 @@ import TaskListHeader from "./TaskListHeader";
 import { SectionContainer } from "../../../styles/common/SectionContainer";
 import { TaskStatus } from "../../../utils/types/tasks.types";
 import { TASKS_LIST } from "../../../utils/dummy-data";
+import { useTasks } from "./TasksContext";
 
 function TasksSection() {
-  const [tasksList] = useState(
-    TASKS_LIST.filter((t) => t.status === TaskStatus.TODO)
-  );
+  const { addTasks, todoList, doingList, doneList } = useTasks();
+
+  useEffect(() => {
+    addTasks(TASKS_LIST);
+  }, []);
 
   return (
     <StyledTasksSection>
@@ -25,19 +28,19 @@ function TasksSection() {
             key="tasksListTodo"
             title="Todo"
             status={TaskStatus.TODO}
-            tasksList={tasksList}
+            tasksList={todoList}
           />
           <TasksList
             key="tasksListDoing"
             title="Doing 💪"
             status={TaskStatus.DOING}
-            tasksList={tasksList}
+            tasksList={doingList}
           />
           <TasksList
             key="tasksListDone"
             title="Done 🎉"
             status={TaskStatus.DONE}
-            tasksList={tasksList}
+            tasksList={doneList}
           />
         </TasksContainer>
       </SectionContainer>
