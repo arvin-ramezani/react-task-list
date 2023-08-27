@@ -7,7 +7,7 @@ import {
   TasksLength,
   TasksListHeader,
   TasksListTitle,
-} from "../../../styles/TasksList.styled";
+} from "../../../styles/Tasks/TasksList.styled";
 import TaskItem from "./TaskItem";
 
 interface TasksListProps {

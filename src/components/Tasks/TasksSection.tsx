@@ -4,7 +4,7 @@ import TasksList from "./TasksList";
 import {
   StyledTasksSection,
   TasksContainer,
-} from "../../../styles/TasksSections.styled";
+} from "../../../styles/Tasks/TasksSections.styled";
 import TaskListHeader from "./TaskListHeader";
 import { SectionContainer } from "../../../styles/common/SectionContainer";
 import { TaskStatus } from "../../../utils/types/tasks.types";

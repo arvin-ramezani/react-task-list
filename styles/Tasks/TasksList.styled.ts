@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import { TaskStatus } from "../utils/types/tasks.types";
+import { TaskStatus } from "../../utils/types/tasks.types";
 
 export const StyledTasksList = styled.div<{ status: TaskStatus }>`
   padding: 20px;

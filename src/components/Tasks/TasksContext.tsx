@@ -7,6 +7,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
+
 import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
 
 interface IInitialTasksState {
@@ -25,6 +26,8 @@ enum TasksReducerActionTypes {
   ADD_ALL_TASKS = "addAllTasks",
   DONE_TASK = "doneTask",
   UNDONE_TASK = "unDoneTask",
+  EDIT_TASK = "editTask",
+  DELETE_TASK = "deleteTask",
 }
 
 interface IAddAllTasksActionPayload {
@@ -37,8 +40,18 @@ interface IDoneTaskActionPayload {
   payload: { id: ITask["id"]; currentStatus: TaskStatus };
 }
 
-interface ITodoTaskActionPayload {
+interface IUndoneTaskActionPayload {
   type: TasksReducerActionTypes.UNDONE_TASK;
+  payload: { id: ITask["id"] };
+}
+
+interface IEditTaskActionPayload {
+  type: TasksReducerActionTypes.EDIT_TASK;
+  payload: { id: ITask["id"]; text: ITask["text"] };
+}
+
+interface IDeleteTaskActionPayload {
+  type: TasksReducerActionTypes.DELETE_TASK;
   payload: { id: ITask["id"] };
 }
 
@@ -49,7 +62,9 @@ interface IReducerActionWithoutPayload {
 type ReducerActionType =
   | IAddAllTasksActionPayload
   | IDoneTaskActionPayload
-  | ITodoTaskActionPayload;
+  | IUndoneTaskActionPayload
+  | IEditTaskActionPayload
+  | IDeleteTaskActionPayload;
 
 const reducer = (
   state: IInitialTasksState,
@@ -114,6 +129,68 @@ const reducer = (
 
       return { ...state };
 
+    case TasksReducerActionTypes.EDIT_TASK:
+      const taskToEdit = [
+        ...state.todoList,
+        ...state.doneList,
+        ...state.doingList,
+      ].find((t) => t.id === payload.id);
+
+      if (!taskToEdit) return state;
+
+      taskToEdit.text = payload.text;
+
+      if (taskToEdit.status === TaskStatus.TODO) {
+        state.todoList.forEach((t) => {
+          t.id === taskToEdit.id ? taskToEdit : t;
+        });
+      }
+
+      if (taskToEdit.status === TaskStatus.DOING) {
+        state.doingList.forEach((t) => {
+          t.id === taskToEdit.id ? taskToEdit : t;
+        });
+      }
+
+      if (taskToEdit.status === TaskStatus.DONE) {
+        state.doneList.forEach((t) => {
+          t.id === taskToEdit.id ? taskToEdit : t;
+        });
+      }
+
+      localStorage.setItem("tasks", JSON.stringify({ ...state }));
+
+      return { ...state };
+
+    case TasksReducerActionTypes.DELETE_TASK:
+      const taskToDelete = [
+        ...state.todoList,
+        ...state.doneList,
+        ...state.doingList,
+      ].find((t) => t.id === payload.id);
+
+      if (!taskToDelete) return state;
+
+      if (taskToDelete.status === TaskStatus.TODO) {
+        state.todoList = state.todoList.filter((t) => t.id !== taskToDelete.id);
+      }
+
+      if (taskToDelete.status === TaskStatus.DOING) {
+        state.doingList = state.doingList.filter(
+          (t) => t.id !== taskToDelete.id
+        );
+      }
+
+      if (taskToDelete.status === TaskStatus.DONE) {
+        state.doneList = state.doneList.filter((t) => t.id !== taskToDelete.id);
+      }
+
+      localStorage.setItem("tasks", JSON.stringify({ ...state }));
+
+      console.log(payload.id);
+
+      return { ...state };
+
     default:
       throw new Error("Invalid action type!");
   }
@@ -150,11 +227,30 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     }, 3000);
   }, []);
 
+  const editTask = useCallback(
+    (editTaskPayload: { id: number; text: string }) => {
+      dispatch({
+        type: TasksReducerActionTypes.EDIT_TASK,
+        payload: editTaskPayload,
+      });
+    },
+    []
+  );
+
+  const deleteTask = useCallback((deleteTaskPayload: { id: number }) => {
+    dispatch({
+      type: TasksReducerActionTypes.DELETE_TASK,
+      payload: deleteTaskPayload,
+    });
+  }, []);
+
   return {
     state,
     addAllTasks,
     doneTask,
     undoneTask,
+    editTask,
+    deleteTask,
   };
 };
 
@@ -165,6 +261,8 @@ const initialContextState: UseTasksContextType = {
   addAllTasks: (tasksList: ITask[]) => {},
   doneTask: (payload: { id: number; currentStatus: TaskStatus }) => {},
   undoneTask: (payload: { id: number }) => {},
+  editTask: (payload: { id: number; text: string }) => {},
+  deleteTask: (payload: { id: number }) => {},
 };
 
 export const TasksContext =
@@ -192,6 +290,8 @@ type useTasksType = {
   addAllTasks: (taskList: ITask[]) => void;
   doneTask: (payload: { id: number; currentStatus: TaskStatus }) => void;
   undoneTask: (payload: { id: number }) => void;
+  editTask: (payload: { id: number; text: string }) => void;
+  deleteTask: (payload: { id: number }) => void;
 };
 
 export const useTasks = (): useTasksType => {
@@ -200,7 +300,18 @@ export const useTasks = (): useTasksType => {
     addAllTasks,
     doneTask,
     undoneTask,
+    editTask,
+    deleteTask,
   } = useContext(TasksContext);
 
-  return { todoList, doingList, doneList, addAllTasks, doneTask, undoneTask };
+  return {
+    todoList,
+    doingList,
+    doneList,
+    addAllTasks,
+    doneTask,
+    undoneTask,
+    editTask,
+    deleteTask,
+  };
 };

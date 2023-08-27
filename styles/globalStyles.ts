@@ -45,6 +45,10 @@ table {
 	border-spacing: 0;
 }
 
+textarea {
+	font-family: 'Roboto', sans-serif;
+}
+
 
 
   body {

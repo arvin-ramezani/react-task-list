@@ -4,8 +4,8 @@ import {
   TasksListHeading,
   TasksListSubHeading,
   TasksListParagraph,
-} from "../../../styles/TasksSections.styled";
-import { StyledTasksListHeader } from "../../../styles/TasksSections.styled";
+} from "../../../styles/Tasks/TasksSections.styled";
+import { StyledTasksListHeader } from "../../../styles/Tasks/TasksSections.styled";
 
 function TaskListHeader() {
   return (
