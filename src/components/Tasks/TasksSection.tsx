@@ -12,10 +12,10 @@ import { TASKS_LIST } from "../../../utils/dummy-data";
 import { useTasks } from "./TasksContext";
 
 function TasksSection() {
-  const { addTasks, todoList, doingList, doneList } = useTasks();
+  const { addAllTasks, todoList, doingList, doneList } = useTasks();
 
   useEffect(() => {
-    addTasks(TASKS_LIST);
+    addAllTasks(TASKS_LIST);
   }, []);
 
   return (
