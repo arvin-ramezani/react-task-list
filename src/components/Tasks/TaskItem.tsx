@@ -16,7 +16,7 @@ import {
   TaskItemText,
 } from "../../../styles/Tasks/TaskItem.styled";
 import CheckBox from "../ui/CheckBox";
-import { useTasks } from "./TasksContext";
+import { useTasks } from "../../context/TasksContext";
 import DeleteTaskConfirmModal from "./DeleteTaskConfirmModal";
 
 interface TaskItemProps extends ITask {}
@@ -32,6 +32,8 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
   const [isEditing, setIsEditing] = useState(addMode || false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const delayRef = useRef<number>(null);
+  const [isDone, setIsDone] = useState(status === TaskStatus.DONE);
 
   const onConfirmDelete = () => {
     deleteTask({ id });
@@ -43,6 +45,11 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
 
   const onDeleteClick = () => {
     setShowDeleteModal(true);
+
+    if (delayRef.current && isDone) {
+      setIsDone(false);
+      clearTimeout(delayRef.current);
+    }
   };
 
   const onAdd = () => {
@@ -80,6 +87,11 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
 
   const onEditTaskClick: MouseEventHandler<HTMLParagraphElement> = (e) => {
     setIsEditing(true);
+
+    if (delayRef.current && isDone) {
+      setIsDone(false);
+      clearTimeout(delayRef.current);
+    }
   };
 
   const startHovering = () => {
@@ -90,12 +102,19 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
     setIsHovering(false);
   };
 
-  const onTaskStatusChange = () => {
-    if (status !== TaskStatus.DONE) {
-      doneTask({ id, currentStatus: status });
-    } else {
-      undoneTask({ id });
-    }
+  const onToggleDoneTask = () => {
+    setIsDone((prev) => !prev);
+
+    delayRef.current && clearTimeout(delayRef.current);
+
+    // @ts-ignore
+    delayRef.current = setTimeout(() => {
+      if (isDone) {
+        doneTask({ id, currentStatus: status });
+      } else {
+        undoneTask({ id });
+      }
+    }, 3000);
   };
 
   useEffect(() => {
@@ -104,6 +123,12 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
       inputRef.current.focus({});
     }
   }, [isEditing]);
+
+  useEffect(() => {
+    return () => {
+      delayRef.current && clearTimeout(delayRef.current);
+    };
+  }, []);
 
   return (
     <StyledTaskItem onMouseEnter={startHovering} onMouseLeave={endHovering}>
@@ -117,10 +142,10 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
 
       <div>
         <CheckBox
-          onChange={onTaskStatusChange}
+          onChange={onToggleDoneTask}
           name={`tasksItem${id}`}
           status={status}
-          disabled={isEditing}
+          disabled={isEditing || showDeleteModal}
         />
       </div>
 

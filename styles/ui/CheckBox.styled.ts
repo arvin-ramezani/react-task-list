@@ -10,17 +10,16 @@ export const StyledLabel = styled.label<{
   cursor: pointer;
 
   opacity: ${({ disabled }) => (disabled === true ? 0.3 : 1)};
-
-  & input:checked ~ span:after {
-    display: block;
-  }
 `;
 
 export const StyledCheckBox = styled.input`
   visibility: hidden;
 `;
 
-export const CustomCheckBox = styled.span<{ status: TaskStatus }>`
+export const CustomCheckBox = styled.span<{
+  status: TaskStatus;
+  checked: boolean;
+}>`
   position: absolute;
   top: 0;
   left: 0;
@@ -32,7 +31,6 @@ export const CustomCheckBox = styled.span<{ status: TaskStatus }>`
 
   &:after {
     content: "";
-    display: none;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -42,6 +40,8 @@ export const CustomCheckBox = styled.span<{ status: TaskStatus }>`
     border-width: 0 2px 2px 0;
     transform: translate(-50%, -60%) rotate(45deg);
 
+    display: ${({ checked }) => (checked ? "block" : "none")};
     color: ${({ theme }) => theme.colors.done.cta};
+    border-color: ${({ theme, status }) => theme.colors[status].cta};
   }
 `;
