@@ -21,10 +21,15 @@ import DeleteTaskConfirmModal from "./DeleteTaskConfirmModal";
 
 interface TaskItemProps extends ITask {}
 
-function TaskItem({ text, status, id }: TaskItemProps) {
-  const { doneTask, undoneTask, editTask, deleteTask } = useTasks();
+type TaskItemTypes = TaskItemProps & {
+  addMode: boolean;
+  onExitAddMode: () => void;
+};
+
+function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
+  const { doneTask, undoneTask, editTask, deleteTask, addTask } = useTasks();
   const [isHovering, setIsHovering] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(addMode || false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -40,8 +45,16 @@ function TaskItem({ text, status, id }: TaskItemProps) {
     setShowDeleteModal(true);
   };
 
+  const onAdd = () => {
+    const text = inputRef.current?.value;
+
+    if (!text || text?.trim() === "") return;
+
+    addTask({ status, text });
+    onExitAddMode();
+  };
+
   const onEdit = () => {
-    console.log(inputRef.current!.value === text, "Edit");
     if (
       !inputRef.current ||
       inputRef.current.value.trim() === "" ||
@@ -54,10 +67,13 @@ function TaskItem({ text, status, id }: TaskItemProps) {
     return setIsEditing(false);
   };
 
+  const onCancelEdit = () => {
+    setIsEditing(false);
+    onExitAddMode && onExitAddMode();
+  };
+
   const onEditInputChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     if (!inputRef.current) return;
-
-    console.log(e);
 
     inputRef.current.value = e.target.value;
   };
@@ -78,7 +94,6 @@ function TaskItem({ text, status, id }: TaskItemProps) {
     if (status !== TaskStatus.DONE) {
       doneTask({ id, currentStatus: status });
     } else {
-      console.log("undoneTask");
       undoneTask({ id });
     }
   };
@@ -105,6 +120,7 @@ function TaskItem({ text, status, id }: TaskItemProps) {
           onChange={onTaskStatusChange}
           name={`tasksItem${id}`}
           status={status}
+          disabled={isEditing}
         />
       </div>
 
@@ -123,9 +139,9 @@ function TaskItem({ text, status, id }: TaskItemProps) {
 
       {isEditing && (
         <EditActionsBlock status={status}>
-          <button onClick={setIsEditing.bind(null, false)}>Cancel</button>
-          <EditBtn onClick={onEdit} status={status}>
-            Edit
+          <button onClick={onCancelEdit}>Cancel</button>
+          <EditBtn onClick={addMode ? onAdd : onEdit} status={status}>
+            {addMode ? "Add" : "Edit"}
           </EditBtn>
         </EditActionsBlock>
       )}

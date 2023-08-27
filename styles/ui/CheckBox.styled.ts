@@ -2,10 +2,14 @@ import { styled } from "styled-components";
 
 import { TaskStatus } from "../../utils/types/tasks.types";
 
-export const StyledLabel = styled.label`
+export const StyledLabel = styled.label<{
+  disabled?: boolean;
+}>`
   display: block;
   position: relative;
   cursor: pointer;
+
+  opacity: ${({ disabled }) => (disabled === true ? 0.3 : 1)};
 
   & input:checked ~ span:after {
     display: block;

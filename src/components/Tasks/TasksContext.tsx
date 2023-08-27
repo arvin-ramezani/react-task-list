@@ -3,12 +3,11 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useReducer,
-  useState,
 } from "react";
 
 import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
+import { createId } from "../../../utils/helpers/createId";
 
 interface IInitialTasksState {
   todoList: ITask[];
@@ -28,6 +27,7 @@ enum TasksReducerActionTypes {
   UNDONE_TASK = "unDoneTask",
   EDIT_TASK = "editTask",
   DELETE_TASK = "deleteTask",
+  ADD_TASK = "addTask",
 }
 
 interface IAddAllTasksActionPayload {
@@ -55,6 +55,11 @@ interface IDeleteTaskActionPayload {
   payload: { id: ITask["id"] };
 }
 
+interface IAddTaskActionPayload {
+  type: TasksReducerActionTypes.ADD_TASK;
+  payload: { status: TaskStatus; text: ITask["text"] };
+}
+
 interface IReducerActionWithoutPayload {
   type: TasksReducerActionTypes;
 }
@@ -64,7 +69,8 @@ type ReducerActionType =
   | IDoneTaskActionPayload
   | IUndoneTaskActionPayload
   | IEditTaskActionPayload
-  | IDeleteTaskActionPayload;
+  | IDeleteTaskActionPayload
+  | IAddTaskActionPayload;
 
 const reducer = (
   state: IInitialTasksState,
@@ -187,7 +193,28 @@ const reducer = (
 
       localStorage.setItem("tasks", JSON.stringify({ ...state }));
 
-      console.log(payload.id);
+      return { ...state };
+
+    case TasksReducerActionTypes.ADD_TASK:
+      const taskToAdd: ITask = {
+        id: createId(),
+        text: payload.text,
+        status: payload.status,
+      };
+
+      if (taskToAdd.status === TaskStatus.TODO) {
+        state.todoList.push(taskToAdd);
+      }
+
+      if (taskToAdd.status === TaskStatus.DOING) {
+        state.doingList.push(taskToAdd);
+      }
+
+      if (taskToAdd.status === TaskStatus.DONE) {
+        state.doneList.push(taskToAdd);
+      }
+
+      localStorage.setItem("tasks", JSON.stringify({ ...state }));
 
       return { ...state };
 
@@ -207,7 +234,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
   }, []);
 
   const doneTask = useCallback(
-    (taskToDonePayload: { id: number; currentStatus: TaskStatus }) => {
+    (taskToDonePayload: { id: ITask["id"]; currentStatus: TaskStatus }) => {
       setTimeout(() => {
         dispatch({
           type: TasksReducerActionTypes.DONE_TASK,
@@ -218,7 +245,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     []
   );
 
-  const undoneTask = useCallback((taskToUndonePayload: { id: number }) => {
+  const undoneTask = useCallback((taskToUndonePayload: { id: ITask["id"] }) => {
     setTimeout(() => {
       dispatch({
         type: TasksReducerActionTypes.UNDONE_TASK,
@@ -228,7 +255,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
   }, []);
 
   const editTask = useCallback(
-    (editTaskPayload: { id: number; text: string }) => {
+    (editTaskPayload: { id: ITask["id"]; text: ITask["text"] }) => {
       dispatch({
         type: TasksReducerActionTypes.EDIT_TASK,
         payload: editTaskPayload,
@@ -237,12 +264,22 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     []
   );
 
-  const deleteTask = useCallback((deleteTaskPayload: { id: number }) => {
+  const deleteTask = useCallback((deleteTaskPayload: { id: ITask["id"] }) => {
     dispatch({
       type: TasksReducerActionTypes.DELETE_TASK,
       payload: deleteTaskPayload,
     });
   }, []);
+
+  const addTask = useCallback(
+    (addTaskPayload: { text: ITask["text"]; status: TaskStatus }) => {
+      dispatch({
+        type: TasksReducerActionTypes.ADD_TASK,
+        payload: addTaskPayload,
+      });
+    },
+    []
+  );
 
   return {
     state,
@@ -251,6 +288,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     undoneTask,
     editTask,
     deleteTask,
+    addTask,
   };
 };
 
@@ -263,6 +301,7 @@ const initialContextState: UseTasksContextType = {
   undoneTask: (payload: { id: number }) => {},
   editTask: (payload: { id: number; text: string }) => {},
   deleteTask: (payload: { id: number }) => {},
+  addTask: (payload: { text: string; status: TaskStatus }) => {},
 };
 
 export const TasksContext =
@@ -292,6 +331,7 @@ type useTasksType = {
   undoneTask: (payload: { id: number }) => void;
   editTask: (payload: { id: number; text: string }) => void;
   deleteTask: (payload: { id: number }) => void;
+  addTask: (payload: { text: string; status: TaskStatus }) => void;
 };
 
 export const useTasks = (): useTasksType => {
@@ -302,6 +342,7 @@ export const useTasks = (): useTasksType => {
     undoneTask,
     editTask,
     deleteTask,
+    addTask,
   } = useContext(TasksContext);
 
   return {
@@ -313,5 +354,6 @@ export const useTasks = (): useTasksType => {
     undoneTask,
     editTask,
     deleteTask,
+    addTask,
   };
 };

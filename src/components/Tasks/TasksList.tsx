@@ -2,13 +2,13 @@ import React from "react";
 
 import { TaskStatus, ITask } from "../../../utils/types/tasks.types";
 import {
-  NewTaskBtn,
   StyledTasksList,
   TasksLength,
   TasksListHeader,
   TasksListTitle,
 } from "../../../styles/Tasks/TasksList.styled";
 import TaskItem from "./TaskItem";
+import AddTask from "./AddTask";
 
 interface TasksListProps {
   tasksList: ITask[];
@@ -31,10 +31,7 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
         ))}
       </div>
 
-      <NewTaskBtn status={status}>
-        <span>+</span>
-        New
-      </NewTaskBtn>
+      <AddTask status={status} />
     </StyledTasksList>
   );
 }

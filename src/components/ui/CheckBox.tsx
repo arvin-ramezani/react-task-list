@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 
 import {
   CustomCheckBox,
@@ -11,18 +11,21 @@ interface CheckBoxProps {
   name: string;
   status: TaskStatus;
   onChange: () => void;
+  disabled?: boolean;
 }
 
-const CheckBox = ({ name, status, onChange }: CheckBoxProps) => {
+const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
   const [checked, setChecked] = useState(status === TaskStatus.DONE);
 
   const onChangeHandler = () => {
+    if (disabled) return;
+
     setChecked((prev) => !prev);
     onChange();
   };
 
   return (
-    <StyledLabel htmlFor={name} onClick={onChangeHandler}>
+    <StyledLabel htmlFor={name} onClick={onChangeHandler} disabled={disabled}>
       <StyledCheckBox
         checked={checked}
         onChange={onChangeHandler}
