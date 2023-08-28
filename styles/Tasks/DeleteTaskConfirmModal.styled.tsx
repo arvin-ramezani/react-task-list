@@ -1,7 +1,11 @@
 import { styled } from "styled-components";
 import { TaskStatus } from "../../utils/types/tasks.types";
 
-export const StyledDeleteTask = styled.div<{ status: TaskStatus }>`
+export const StyledDeleteTask = styled.div.attrs<{
+  $status: TaskStatus;
+}>((props) => ({
+  $status: props.$status,
+}))`
   position: absolute;
   left: 0;
   width: 100%;
@@ -15,9 +19,7 @@ export const StyledDeleteTask = styled.div<{ status: TaskStatus }>`
   font-weight: 600;
   background-color: #fff;
 
-  /* background-color: ${({ theme, status }) =>
-    theme.colors[status].background}; */
-  color: ${({ theme, status }) => theme.colors[status].cta};
+  color: ${({ theme, $status }) => theme.colors[$status].cta};
 
   & button {
     cursor: pointer;
@@ -29,6 +31,6 @@ export const StyledDeleteTask = styled.div<{ status: TaskStatus }>`
   }
 
   & button:first-child {
-    color: ${({ theme, status }) => theme.colors[status].disabledText};
+    color: ${({ theme, $status }) => theme.colors[$status].disabledText};
   }
 `;

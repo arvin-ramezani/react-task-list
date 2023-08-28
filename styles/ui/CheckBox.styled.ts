@@ -17,7 +17,7 @@ export const StyledCheckBox = styled.input`
 `;
 
 export const CustomCheckBox = styled.span<{
-  status: TaskStatus;
+  $status: TaskStatus;
   checked: boolean;
 }>`
   position: absolute;
@@ -27,7 +27,7 @@ export const CustomCheckBox = styled.span<{
   height: 16px;
 
   border: 1px solid;
-  border-color: ${({ theme, status }) => theme.colors[status].borderColor};
+  border-color: ${({ theme, $status }) => theme.colors[$status].borderColor};
 
   &:after {
     content: "";
@@ -42,6 +42,6 @@ export const CustomCheckBox = styled.span<{
 
     display: ${({ checked }) => (checked ? "block" : "none")};
     color: ${({ theme }) => theme.colors.done.cta};
-    border-color: ${({ theme, status }) => theme.colors[status].cta};
+    border-color: ${({ theme, $status }) => theme.colors[$status].cta};
   }
 `;

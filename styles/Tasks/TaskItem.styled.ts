@@ -35,11 +35,11 @@ export const StyledTaskItem = styled.div.attrs<{
 `;
 
 export const DragBackdrop = styled.div.attrs<{
-  status: TaskStatus;
-  dragging?: "true" | "false";
+  $status: TaskStatus;
+  $dragging?: "true" | "false";
 }>((props) => ({
-  status: props.status,
-  dragging: props.dragging,
+  $status: props.$status,
+  $dragging: props.$dragging,
 }))`
   border-radius: 4px;
   background-color: #fff;
@@ -52,11 +52,16 @@ export const DragBackdrop = styled.div.attrs<{
 
   transform: translateY(-12px);
 
-  display: ${({ dragging }) => (dragging === "true" ? "block" : "none")};
-  border: 1px dashed ${({ theme, status }) => theme.colors[status].borderColor};
+  display: ${({ $dragging }) => ($dragging === "true" ? "block" : "none")};
+  border: 1px dashed
+    ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;
 
-export const StyledTextArea = styled.textarea<{ status: TaskStatus }>`
+export const StyledTextArea = styled.textarea.attrs<{
+  $status: TaskStatus;
+}>((props) => ({
+  $status: props.$status,
+}))`
   font-size: 0.75rem;
   line-height: 130%;
   color: #000;
@@ -65,7 +70,7 @@ export const StyledTextArea = styled.textarea<{ status: TaskStatus }>`
   border-radius: 3px;
   padding: 0.2rem 0.3rem;
 
-  border-color: ${({ theme, status }) => theme.colors[status].borderColor};
+  border-color: ${({ theme, $status }) => theme.colors[$status].borderColor};
 
   &:focus {
     outline: none;
@@ -82,25 +87,33 @@ export const StyledTextArea = styled.textarea<{ status: TaskStatus }>`
   &::-webkit-scrollbar-thumb {
     border-radius: 20px;
 
-    background-color: ${({ theme, status }) =>
-      theme.colors[status].disabledText};
+    background-color: ${({ theme, $status }) =>
+      theme.colors[$status].disabledText};
   }
 `;
 
-export const TaskItemText = styled.p<{ status: TaskStatus }>`
+export const TaskItemText = styled.p.attrs<{
+  $status: TaskStatus;
+}>((props) => ({
+  $status: props.$status,
+}))`
   font-size: 0.75rem;
   line-height: 130%;
   cursor: text;
 
-  text-decoration: ${({ status }) =>
-    status === TaskStatus.DONE ? "line-through" : "none"};
+  text-decoration: ${({ $status }) =>
+    $status === TaskStatus.DONE ? "line-through" : "none"};
 `;
 
-export const EditActionsBlock = styled.div<{ status: TaskStatus }>`
+export const EditActionsBlock = styled.div.attrs<{
+  $status: TaskStatus;
+}>((props) => ({
+  $status: props.$status,
+}))`
   font-size: 12px;
   font-weight: 600;
 
-  color: ${({ theme, status }) => theme.colors[status].disabledText};
+  color: ${({ theme, $status }) => theme.colors[$status].disabledText};
 
   & button {
     display: block;
@@ -117,13 +130,19 @@ export const EditActionsBlock = styled.div<{ status: TaskStatus }>`
   }
 `;
 
-export const EditBtn = styled.button<{ status: TaskStatus }>`
-  color: ${({ status, theme }) => theme.colors[status].heading} !important;
+export const EditBtn = styled.button.attrs<{
+  $status: TaskStatus;
+}>((props) => ({
+  $status: props.$status,
+}))`
+  color: ${({ $status, theme }) => theme.colors[$status].heading} !important;
 `;
 
-export const RemoveTask = styled.div<{
-  status: TaskStatus;
-}>`
+export const RemoveTask = styled.div.attrs<{
+  $status: TaskStatus;
+}>((props) => ({
+  $status: props.$status,
+}))`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,5 +156,5 @@ export const RemoveTask = styled.div<{
   width: 24px;
   height: 24px;
 
-  color: ${({ theme, status }) => theme.colors[status].borderColor};
+  color: ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;

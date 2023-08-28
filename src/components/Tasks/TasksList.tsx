@@ -24,12 +24,12 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
         <StyledTasksList
           {...provided.droppableProps}
           ref={provided.innerRef}
-          status={status}
+          $status={status}
         >
           <TasksListHeader>
-            <TasksListTitle status={status}>{title}</TasksListTitle>
+            <TasksListTitle $status={status}>{title}</TasksListTitle>
 
-            <TasksLength status={status}>{tasksList.length} Tasks</TasksLength>
+            <TasksLength $status={status}>{tasksList.length} Tasks</TasksLength>
           </TasksListHeader>
 
           {tasksList.map((task, index) => (

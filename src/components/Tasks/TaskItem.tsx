@@ -152,8 +152,8 @@ function TaskItem({
           $dragging={snapshot.isDragging ? "true" : "false"}
         >
           <DragBackdrop
-            dragging={snapshot.isDragging ? "true" : "false"}
-            status={status}
+            $dragging={snapshot.isDragging ? "true" : "false"}
+            $status={status}
           />
 
           <StyledTaskItem
@@ -184,25 +184,25 @@ function TaskItem({
                 ref={inputRef}
                 onChange={onEditInputChange}
                 name={`editTask${id}`}
-                status={status}
+                $status={status}
               />
             ) : (
-              <TaskItemText onClick={onEditTaskClick} status={status}>
+              <TaskItemText onClick={onEditTaskClick} $status={status}>
                 {text}
               </TaskItemText>
             )}
 
             {isEditing && (
-              <EditActionsBlock status={status}>
+              <EditActionsBlock $status={status}>
                 <button onClick={onCancelEdit}>Cancel</button>
-                <EditBtn onClick={addMode ? onAdd : onEdit} status={status}>
+                <EditBtn onClick={addMode ? onAdd : onEdit} $status={status}>
                   {addMode ? "Add" : "Edit"}
                 </EditBtn>
               </EditActionsBlock>
             )}
 
             {!isEditing && isHovering && (
-              <RemoveTask onClick={onDeleteClick} status={status}>
+              <RemoveTask onClick={onDeleteClick} $status={status}>
                 <span>🗙</span>
               </RemoveTask>
             )}

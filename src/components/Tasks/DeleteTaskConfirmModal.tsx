@@ -15,7 +15,7 @@ const DeleteTaskConfirmModal: FC<DeleteTaskConfirmModalProps> = ({
   onConfirm,
 }) => {
   return (
-    <StyledDeleteTask status={status}>
+    <StyledDeleteTask $status={status}>
       <button onClick={onCancel}>Cancel</button>
 
       <button onClick={onConfirm}>Delete</button>

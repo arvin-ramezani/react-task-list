@@ -38,7 +38,7 @@ const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
         name={name}
       />
 
-      <CustomCheckBox checked={disabled ? false : checked} status={status} />
+      <CustomCheckBox checked={disabled ? false : checked} $status={status} />
     </StyledLabel>
   );
 };

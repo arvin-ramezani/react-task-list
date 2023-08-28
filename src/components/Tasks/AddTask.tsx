@@ -16,7 +16,7 @@ function AddTask({ status, absolutePosition }: AddTaskProps) {
   const [isAdding, setIsAdding] = useState(false);
 
   return (
-    <StyledAddTask absolute={absolutePosition ? "true" : "false"}>
+    <StyledAddTask $absolute={absolutePosition ? "true" : "false"}>
       {isAdding && (
         <TaskItem
           key={`newTask${status}`}
@@ -28,7 +28,7 @@ function AddTask({ status, absolutePosition }: AddTaskProps) {
         />
       )}
 
-      <NewTaskBtn onClick={setIsAdding.bind(null, true)} status={status}>
+      <NewTaskBtn onClick={setIsAdding.bind(null, true)} $status={status}>
         <span>+</span>
         New
       </NewTaskBtn>
