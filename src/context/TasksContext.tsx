@@ -28,6 +28,10 @@ enum TasksReducerActionTypes {
   EDIT_TASK = "editTask",
   DELETE_TASK = "deleteTask",
   ADD_TASK = "addTask",
+  SET_TODO_LIST = "setTodoList",
+  SET_DOING_LIST = "setDoingList",
+  SET_DONE_LIST = "setDoneList",
+  DRAG_DROP = "dragDrop",
 }
 
 interface IAddAllTasksActionPayload {
@@ -60,6 +64,16 @@ interface IAddTaskActionPayload {
   payload: { status: TaskStatus; text: ITask["text"] };
 }
 
+interface IDragDropActionPayload {
+  type: TasksReducerActionTypes.DRAG_DROP;
+  payload: {
+    sourceStatus: TaskStatus;
+    sourceIndex: number;
+    destinationStatus: TaskStatus;
+    destinationIndex: number;
+  };
+}
+
 interface IReducerActionWithoutPayload {
   type: TasksReducerActionTypes;
 }
@@ -70,7 +84,8 @@ type ReducerActionType =
   | IUndoneTaskActionPayload
   | IEditTaskActionPayload
   | IDeleteTaskActionPayload
-  | IAddTaskActionPayload;
+  | IAddTaskActionPayload
+  | IDragDropActionPayload;
 
 const reducer = (
   state: IInitialTasksState,
@@ -218,6 +233,26 @@ const reducer = (
 
       return { ...state };
 
+    case TasksReducerActionTypes.DRAG_DROP:
+      const { sourceStatus, sourceIndex, destinationStatus, destinationIndex } =
+        payload;
+
+      const listToDrag = state[`${sourceStatus}List`];
+      const listToDrop = state[`${destinationStatus}List`];
+
+      const [removedSourceTask] = listToDrag.splice(sourceIndex, 1);
+
+      const taskToDrop = {
+        ...removedSourceTask,
+        status: destinationStatus,
+      };
+
+      listToDrop.splice(destinationIndex, 0, taskToDrop);
+
+      localStorage.setItem("tasks", JSON.stringify(state));
+
+      return state;
+
     default:
       throw new Error("Invalid action type!");
   }
@@ -277,6 +312,16 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     []
   );
 
+  const dragDropHandler = useCallback(
+    (dragDropPayload: IDragDropActionPayload["payload"]) => {
+      dispatch({
+        type: TasksReducerActionTypes.DRAG_DROP,
+        payload: dragDropPayload,
+      });
+    },
+    []
+  );
+
   return {
     state,
     addAllTasks,
@@ -285,6 +330,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     editTask,
     deleteTask,
     addTask,
+    dragDropHandler,
   };
 };
 
@@ -298,6 +344,7 @@ const initialContextState: UseTasksContextType = {
   editTask: (payload: { id: number; text: string }) => {},
   deleteTask: (payload: { id: number }) => {},
   addTask: (payload: { text: string; status: TaskStatus }) => {},
+  dragDropHandler: (payload: IDragDropActionPayload["payload"]) => {},
 };
 
 export const TasksContext =
@@ -328,6 +375,7 @@ type useTasksType = {
   editTask: (payload: { id: number; text: string }) => void;
   deleteTask: (payload: { id: number }) => void;
   addTask: (payload: { text: string; status: TaskStatus }) => void;
+  dragDropHandler: (payload: IDragDropActionPayload["payload"]) => void;
 };
 
 export const useTasks = (): useTasksType => {
@@ -339,6 +387,7 @@ export const useTasks = (): useTasksType => {
     editTask,
     deleteTask,
     addTask,
+    dragDropHandler,
   } = useContext(TasksContext);
 
   return {
@@ -351,5 +400,6 @@ export const useTasks = (): useTasksType => {
     editTask,
     deleteTask,
     addTask,
+    dragDropHandler,
   };
 };

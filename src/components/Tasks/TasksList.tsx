@@ -1,5 +1,6 @@
 import React from "react";
 
+import { StrictModeDroppable as Droppable } from "../ui/strictModeDropable";
 import { TaskStatus, ITask } from "../../../utils/types/tasks.types";
 import {
   StyledTasksList,
@@ -18,21 +19,35 @@ interface TasksListProps {
 
 function TasksList({ tasksList, title, status }: TasksListProps) {
   return (
-    <StyledTasksList status={status}>
-      <TasksListHeader>
-        <TasksListTitle status={status}>{title}</TasksListTitle>
+    <Droppable key={status} droppableId={status}>
+      {(provided, snapshot) => (
+        <StyledTasksList
+          {...provided.droppableProps}
+          ref={provided.innerRef}
+          status={status}
+        >
+          <TasksListHeader>
+            <TasksListTitle status={status}>{title}</TasksListTitle>
 
-        <TasksLength status={status}>{tasksList.length} Tasks</TasksLength>
-      </TasksListHeader>
+            <TasksLength status={status}>{tasksList.length} Tasks</TasksLength>
+          </TasksListHeader>
 
-      <div>
-        {tasksList.map((task) => (
-          <TaskItem key={task.id} {...task} />
-        ))}
-      </div>
+          {tasksList.map((task, index) => (
+            <TaskItem
+              index={index}
+              key={task.id}
+              {...task}
+              addMode={false}
+              onExitAddMode={() => {}}
+            />
+          ))}
 
-      <AddTask status={status} />
-    </StyledTasksList>
+          <AddTask absolutePosition={snapshot.isDraggingOver} status={status} />
+
+          {provided.placeholder}
+        </StyledTasksList>
+      )}
+    </Droppable>
   );
 }
 

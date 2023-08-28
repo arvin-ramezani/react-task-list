@@ -3,9 +3,10 @@ import { styled } from "styled-components";
 import { TaskStatus } from "../../utils/types/tasks.types";
 
 export const StyledTasksList = styled.div<{ status: TaskStatus }>`
-  padding: 20px;
+  padding: 20px 20px 40px 20px;
   border-radius: 10px;
   margin: 2rem 0;
+  position: relative;
 
   background-color: ${({ status, theme }) => theme.colors[status].background};
 `;

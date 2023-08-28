@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { Draggable } from "react-beautiful-dnd";
 
 import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
 import {
@@ -14,19 +15,30 @@ import {
   StyledTaskItem,
   StyledTextArea,
   TaskItemText,
+  DragBackdrop,
+  TaskItemWrapper,
 } from "../../../styles/Tasks/TaskItem.styled";
 import CheckBox from "../ui/CheckBox";
 import { useTasks } from "../../context/TasksContext";
 import DeleteTaskConfirmModal from "./DeleteTaskConfirmModal";
 
-interface TaskItemProps extends ITask {}
+interface TaskItemProps extends ITask {
+  index?: number;
+}
 
 type TaskItemTypes = TaskItemProps & {
   addMode: boolean;
   onExitAddMode: () => void;
 };
 
-function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
+function TaskItem({
+  text,
+  status,
+  id,
+  addMode,
+  onExitAddMode,
+  index,
+}: TaskItemTypes) {
   const { doneTask, undoneTask, editTask, deleteTask, addTask } = useTasks();
   const [isHovering, setIsHovering] = useState(false);
   const [isEditing, setIsEditing] = useState(addMode || false);
@@ -131,52 +143,73 @@ function TaskItem({ text, status, id, addMode, onExitAddMode }: TaskItemTypes) {
   }, []);
 
   return (
-    <StyledTaskItem onMouseEnter={startHovering} onMouseLeave={endHovering}>
-      {showDeleteModal && (
-        <DeleteTaskConfirmModal
-          status={status}
-          onCancel={onCancelDelete}
-          onConfirm={onConfirmDelete}
-        />
-      )}
+    <Draggable index={index!} draggableId={id.toString()}>
+      {(provided, snapshot) => (
+        <TaskItemWrapper
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          $dragging={snapshot.isDragging ? "true" : "false"}
+        >
+          <DragBackdrop
+            dragging={snapshot.isDragging ? "true" : "false"}
+            status={status}
+          />
 
-      <div>
-        <CheckBox
-          onChange={onToggleDoneTask}
-          name={`tasksItem${id}`}
-          status={status}
-          disabled={isEditing || showDeleteModal}
-        />
-      </div>
+          <StyledTaskItem
+            $status={status}
+            $dragging={snapshot.isDragging ? "true" : "false"}
+            onMouseEnter={startHovering}
+            onMouseLeave={endHovering}
+          >
+            {showDeleteModal && (
+              <DeleteTaskConfirmModal
+                status={status}
+                onCancel={onCancelDelete}
+                onConfirm={onConfirmDelete}
+              />
+            )}
 
-      {isEditing ? (
-        <StyledTextArea
-          ref={inputRef}
-          onChange={onEditInputChange}
-          name={`editTask${id}`}
-          status={status}
-        />
-      ) : (
-        <TaskItemText onClick={onEditTaskClick} status={status}>
-          {text}
-        </TaskItemText>
-      )}
+            <div>
+              <CheckBox
+                onChange={onToggleDoneTask}
+                name={`tasksItem${id}`}
+                status={status}
+                disabled={isEditing || showDeleteModal}
+              />
+            </div>
 
-      {isEditing && (
-        <EditActionsBlock status={status}>
-          <button onClick={onCancelEdit}>Cancel</button>
-          <EditBtn onClick={addMode ? onAdd : onEdit} status={status}>
-            {addMode ? "Add" : "Edit"}
-          </EditBtn>
-        </EditActionsBlock>
-      )}
+            {isEditing ? (
+              <StyledTextArea
+                ref={inputRef}
+                onChange={onEditInputChange}
+                name={`editTask${id}`}
+                status={status}
+              />
+            ) : (
+              <TaskItemText onClick={onEditTaskClick} status={status}>
+                {text}
+              </TaskItemText>
+            )}
 
-      {!isEditing && isHovering && (
-        <RemoveTask onClick={onDeleteClick} status={status}>
-          <span>🗙</span>
-        </RemoveTask>
+            {isEditing && (
+              <EditActionsBlock status={status}>
+                <button onClick={onCancelEdit}>Cancel</button>
+                <EditBtn onClick={addMode ? onAdd : onEdit} status={status}>
+                  {addMode ? "Add" : "Edit"}
+                </EditBtn>
+              </EditActionsBlock>
+            )}
+
+            {!isEditing && isHovering && (
+              <RemoveTask onClick={onDeleteClick} status={status}>
+                <span>🗙</span>
+              </RemoveTask>
+            )}
+          </StyledTaskItem>
+        </TaskItemWrapper>
       )}
-    </StyledTaskItem>
+    </Draggable>
   );
 }
 

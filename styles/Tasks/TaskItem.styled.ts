@@ -2,7 +2,22 @@ import { styled } from "styled-components";
 
 import { TaskStatus } from "../../utils/types/tasks.types";
 
-export const StyledTaskItem = styled.div`
+export const TaskItemWrapper = styled.div.attrs<{
+  $dragging: "true" | "false";
+}>((props) => ({
+  $dragging: props.$dragging,
+}))`
+  position: relative;
+  background-color: transparent;
+`;
+
+export const StyledTaskItem = styled.div.attrs<{
+  $dragging?: string;
+  $status: TaskStatus;
+}>((props) => ({
+  $dragging: props.$dragging,
+  $status: props.$status,
+}))`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -11,11 +26,34 @@ export const StyledTaskItem = styled.div`
   padding: 12px 10px;
   border-radius: 4px;
   position: relative;
+  cursor: grab;
+  transition: transform 0.3s;
+
+  rotate: ${({ $dragging }) => ($dragging === "true" ? "-3deg" : "0")};
+
+  border: 1px solid ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;
 
-export const TaskItemCheckBox = styled.input<{ status: TaskStatus }>`
-  width: 16px;
-  height: 16px;
+export const DragBackdrop = styled.div.attrs<{
+  status: TaskStatus;
+  dragging?: "true" | "false";
+}>((props) => ({
+  status: props.status,
+  dragging: props.dragging,
+}))`
+  border-radius: 4px;
+  background-color: #fff;
+  height: 30px;
+  position: absolute;
+  width: 86%;
+  left: 0;
+  top: 0;
+  width: 100%;
+
+  transform: translateY(-12px);
+
+  display: ${({ dragging }) => (dragging === "true" ? "block" : "none")};
+  border: 1px dashed ${({ theme, status }) => theme.colors[status].borderColor};
 `;
 
 export const StyledTextArea = styled.textarea<{ status: TaskStatus }>`
@@ -52,6 +90,7 @@ export const StyledTextArea = styled.textarea<{ status: TaskStatus }>`
 export const TaskItemText = styled.p<{ status: TaskStatus }>`
   font-size: 0.75rem;
   line-height: 130%;
+  cursor: text;
 
   text-decoration: ${({ status }) =>
     status === TaskStatus.DONE ? "line-through" : "none"};
@@ -89,12 +128,14 @@ export const RemoveTask = styled.div<{
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 10px;
+  right: 0px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 12px;
   font-weight: 500;
+  width: 24px;
+  height: 24px;
 
   color: ${({ theme, status }) => theme.colors[status].borderColor};
 `;

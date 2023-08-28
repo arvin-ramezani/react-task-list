@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
-import { NewTaskBtn } from "../../../styles/Tasks/AddTask.styled";
+import {
+  NewTaskBtn,
+  StyledAddTask,
+} from "../../../styles/Tasks/AddTask.styled";
 import TaskItem from "./TaskItem";
 
 interface AddTaskProps {
   status: TaskStatus;
+  absolutePosition: boolean;
 }
 
-function AddTask({ status }: AddTaskProps) {
+function AddTask({ status, absolutePosition }: AddTaskProps) {
   const [isAdding, setIsAdding] = useState(false);
 
   return (
-    <div>
+    <StyledAddTask absolute={absolutePosition ? "true" : "false"}>
       {isAdding && (
         <TaskItem
           key={`newTask${status}`}
@@ -28,7 +32,7 @@ function AddTask({ status }: AddTaskProps) {
         <span>+</span>
         New
       </NewTaskBtn>
-    </div>
+    </StyledAddTask>
   );
 }
 
