@@ -1,13 +1,7 @@
-import React, {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
-import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
+import { ITask } from "../../../../utils/types/tasks.types";
 import {
   EditActionsBlock,
   EditBtn,
@@ -17,18 +11,18 @@ import {
   TaskItemText,
   DragBackdrop,
   TaskItemWrapper,
-} from "../../../styles/Tasks/TaskItem.styled";
-import CheckBox from "../ui/CheckBox";
-import { useTasks } from "../../context/TasksContext";
-import DeleteTaskConfirmModal from "./DeleteTaskConfirmModal";
+} from "../../../../styles/components/Tasks/TaskItem.styled";
+import CheckBox from "../../ui/CheckBox";
+import DeleteTaskConfirmModal from "../DeleteTaskConfirmModal/DeleteTaskConfirmModal";
+import TaskItemLogic from "./TaskItemLogic";
 
 interface TaskItemProps extends ITask {
   index?: number;
 }
 
-type TaskItemTypes = TaskItemProps & {
+type TaskItemPropsTypes = TaskItemProps & {
   addMode: boolean;
-  onExitAddMode: () => void;
+  onExitAddMode?: () => void;
 };
 
 function TaskItem({
@@ -38,100 +32,26 @@ function TaskItem({
   addMode,
   onExitAddMode,
   index,
-}: TaskItemTypes) {
-  const { doneTask, undoneTask, editTask, deleteTask, addTask } = useTasks();
-  const [isHovering, setIsHovering] = useState(false);
-  const [isEditing, setIsEditing] = useState(addMode || false);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const delayRef = useRef<number>(null);
-  let [isDone, setIsDone] = useState(status === TaskStatus.DONE);
-
-  const onConfirmDelete = () => {
-    deleteTask({ id });
-  };
-
-  const onCancelDelete = () => {
-    setShowDeleteModal(false);
-  };
-
-  const onDeleteClick = () => {
-    setShowDeleteModal(true);
-
-    if (delayRef.current && isDone) {
-      setIsDone(false);
-      clearTimeout(delayRef.current);
-    }
-  };
-
-  const onAdd = () => {
-    const text = inputRef.current?.value;
-
-    if (!text || text?.trim() === "") return;
-
-    addTask({ status, text });
-    onExitAddMode();
-  };
-
-  const onEdit = () => {
-    if (
-      !inputRef.current ||
-      inputRef.current.value.trim() === "" ||
-      inputRef.current.value === text
-    )
-      return setIsEditing(false);
-
-    editTask({ id, text: inputRef.current.value });
-
-    return setIsEditing(false);
-  };
-
-  const onCancelEdit = () => {
-    setIsEditing(false);
-    onExitAddMode && onExitAddMode();
-  };
-
-  const onEditInputChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-    if (!inputRef.current) return;
-
-    inputRef.current.value = e.target.value;
-  };
-
-  const onEditTaskClick: MouseEventHandler<HTMLParagraphElement> = (e) => {
-    setIsEditing(true);
-
-    if (delayRef.current) {
-      setIsDone((prev) => !prev);
-      clearTimeout(delayRef.current);
-    }
-  };
-
-  const startHovering = () => {
-    setIsHovering(true);
-  };
-
-  const endHovering = () => {
-    setIsHovering(false);
-  };
-
-  const onToggleDoneTask = () => {
-    setIsDone((prev) => !prev);
-
-    clearSetTimeout();
-
-    // @ts-ignore
-    delayRef.current = setTimeout(() => {
-      if (isDone) {
-        doneTask({ id, currentStatus: status });
-      } else {
-        undoneTask({ id });
-      }
-    }, 3000);
-  };
-
-  const clearSetTimeout = () => {
-    delayRef.current && clearTimeout(delayRef.current);
-  };
+}: TaskItemPropsTypes) {
+  const {
+    isHovering,
+    isEditing,
+    showDeleteModal,
+    inputRef,
+    delayRef,
+    onConfirmDelete,
+    onCancelDelete,
+    onDeleteClick,
+    onAdd,
+    onEdit,
+    onCancelEdit,
+    onEditInputChange,
+    onEditTaskClick,
+    startHovering,
+    endHovering,
+    onToggleDoneTask,
+    clearSetTimeout,
+  } = TaskItemLogic({ id, text, status, addMode, onExitAddMode });
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -167,7 +87,6 @@ function TaskItem({
                 name={`tasksItem${id}`}
                 status={status}
                 disabled={isEditing || showDeleteModal}
-                isDragging={true}
               />
             </div>
 
@@ -244,7 +163,6 @@ function TaskItem({
                       name={`tasksItem${id}`}
                       status={status}
                       disabled={isEditing || showDeleteModal}
-                      isDragging={snapshot.isDragging}
                     />
                   </div>
 

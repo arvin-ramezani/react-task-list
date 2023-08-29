@@ -4,7 +4,7 @@ import {
   CustomCheckBox,
   StyledCheckBox,
   StyledLabel,
-} from "../../../styles/ui/CheckBox.styled";
+} from "../../../styles/components/ui/CheckBox.styled";
 import { TaskStatus } from "../../../utils/types/tasks.types";
 import { useTasks } from "../../context/TasksContext";
 
@@ -13,16 +13,9 @@ interface CheckBoxProps {
   status: TaskStatus;
   onChange: () => void;
   disabled?: boolean;
-  isDragging: boolean;
 }
 
-const CheckBox = ({
-  name,
-  status,
-  onChange,
-  disabled,
-  isDragging,
-}: CheckBoxProps) => {
+const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
   const { isDragging: sss } = useTasks();
   const [checked, setChecked] = useState(status === TaskStatus.DONE);
 

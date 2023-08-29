@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import { TaskStatus } from "../../utils/types/tasks.types";
+import { TaskStatus } from "../../../utils/types/tasks.types";
 
 export const TaskItemWrapper = styled.div.attrs<{
   $dragging: "true" | "false";
@@ -51,10 +51,10 @@ export const DragBackdrop = styled.div.attrs<{
   left: 0;
   top: 0;
   width: 100%;
-
   transform: translateY(-12px);
 
   display: ${({ $dragging }) => ($dragging === "true" ? "block" : "none")};
+
   border: 1px dashed
     ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;

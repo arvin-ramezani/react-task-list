@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { StrictModeDroppable as Droppable } from "../DragDrop/strictModeDroppable";
-import { TaskStatus, ITask } from "../../../utils/types/tasks.types";
+import { StrictModeDroppable as Droppable } from "../../DragDrop/strictModeDroppable";
+import { TaskStatus, ITask } from "../../../../utils/types/tasks.types";
 import {
   StyledTasksList,
   TasksLength,
   TasksListHeader,
   TasksListTitle,
-} from "../../../styles/Tasks/TasksList.styled";
-import TaskItem from "./TaskItem";
-import AddTask from "./AddTask";
+} from "../../../../styles/components/Tasks/TasksList.styled";
+import TaskItem from "../TaskItem/TaskItem";
+import AddTask from "../AddTask/AddTask";
 
 interface TasksListProps {
   tasksList: ITask[];
   title: string;
   status: TaskStatus;
-  // stopTimer: boolean;
 }
 
 function TasksList({ tasksList, title, status }: TasksListProps) {
@@ -34,15 +33,7 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
           </TasksListHeader>
 
           {tasksList.map((task, index) => (
-            <TaskItem
-              index={index}
-              key={task.id}
-              {...task}
-              // listIsDragging={snapshot.isDraggingOver}
-              // stopTimer={stopTimer}
-              addMode={false}
-              onExitAddMode={() => {}}
-            />
+            <TaskItem index={index} key={task.id} {...task} addMode={false} />
           ))}
 
           <AddTask absolutePosition={snapshot.isDraggingOver} status={status} />

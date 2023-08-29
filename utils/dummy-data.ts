@@ -1,7 +1,5 @@
 import { ITask, TaskStatus } from "./types/tasks.types";
 
-// const id = Math.floor(Math.random() * 100);
-
 export const TASKS_LIST: ITask[] = [
   {
     id: 1,

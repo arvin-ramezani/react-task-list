@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import { TaskStatus } from "../../utils/types/tasks.types";
+import { TaskStatus } from "../../../utils/types/tasks.types";
 
 export const StyledLabel = styled.label<{
   disabled?: boolean;
@@ -41,7 +41,9 @@ export const CustomCheckBox = styled.span<{
     transform: translate(-50%, -60%) rotate(45deg);
 
     display: ${({ checked }) => (checked ? "block" : "none")};
+
     color: ${({ theme }) => theme.colors.done.cta};
+
     border-color: ${({ theme, $status }) => theme.colors[$status].cta};
   }
 `;

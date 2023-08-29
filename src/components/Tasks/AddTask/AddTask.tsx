@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import { TaskStatus } from "../../../utils/types/tasks.types";
+import { TaskStatus } from "../../../../utils/types/tasks.types";
 import {
   NewTaskBtn,
   StyledAddTask,
-} from "../../../styles/Tasks/AddTask.styled";
-import TaskItem from "./TaskItem";
+} from "../../../../styles/components/Tasks/AddTask.styled";
+import TaskItem from "../TaskItem/TaskItem";
 
 interface AddTaskProps {
   status: TaskStatus;

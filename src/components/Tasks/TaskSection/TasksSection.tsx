@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, OnDragEndResponder } from "react-beautiful-dnd";
 
-import TasksList from "./TasksList";
+import TasksList from "../TaskList/TasksList";
 import {
   StyledTasksSection,
   TasksContainer,
-} from "../../../styles/Tasks/TasksSections.styled";
-import TaskListHeader from "./TaskListHeader";
-import { SectionContainer } from "../../../styles/common/SectionContainer";
-import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
-import { TASKS_LIST } from "../../../utils/dummy-data";
-import { useTasks } from "../../context/TasksContext";
+} from "../../../../styles/components/Tasks/TasksSections.styled";
+import TaskListHeader from "../TaskListHeader/TaskListHeader";
+import { SectionContainer } from "../../../../styles/components/common/SectionContainer";
+import { TaskStatus } from "../../../../utils/types/tasks.types";
+import { TASKS_LIST } from "../../../../utils/dummy-data";
+import { useTasks } from "../../../context/TasksContext";
 
 function TasksSection() {
   const {

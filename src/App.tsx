@@ -1,13 +1,11 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 
-import TasksSection from "./components/Tasks/TasksSection";
+import TasksSection from "./components/Tasks/TaskSection/TasksSection";
 import GlobalStyle from "../styles/globalStyles";
-import theme from "../utils/theme";
-import {
-  TasksContextProvider,
-  initialTasksState,
-} from "./context/TasksContext";
+import theme from "../styles/theme";
+import { TasksContextProvider } from "./context/TasksContext";
+import { initialTasksState } from "./context/tasksReducer";
 
 function App() {
   return (
