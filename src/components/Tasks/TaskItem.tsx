@@ -45,7 +45,7 @@ function TaskItem({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const delayRef = useRef<number>(null);
-  const [isDone, setIsDone] = useState(status === TaskStatus.DONE);
+  let [isDone, setIsDone] = useState(status === TaskStatus.DONE);
 
   const onConfirmDelete = () => {
     deleteTask({ id });
@@ -100,8 +100,8 @@ function TaskItem({
   const onEditTaskClick: MouseEventHandler<HTMLParagraphElement> = (e) => {
     setIsEditing(true);
 
-    if (delayRef.current && isDone) {
-      setIsDone(false);
+    if (delayRef.current) {
+      setIsDone((prev) => !prev);
       clearTimeout(delayRef.current);
     }
   };
@@ -117,7 +117,7 @@ function TaskItem({
   const onToggleDoneTask = () => {
     setIsDone((prev) => !prev);
 
-    delayRef.current && clearTimeout(delayRef.current);
+    clearSetTimeout();
 
     // @ts-ignore
     delayRef.current = setTimeout(() => {
@@ -129,6 +129,10 @@ function TaskItem({
     }, 3000);
   };
 
+  const clearSetTimeout = () => {
+    delayRef.current && clearTimeout(delayRef.current);
+  };
+
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.value = text;
@@ -136,29 +140,16 @@ function TaskItem({
     }
   }, [isEditing]);
 
-  useEffect(() => {
-    return () => {
-      delayRef.current && clearTimeout(delayRef.current);
-    };
-  }, []);
-
   return (
-    <Draggable index={index!} draggableId={id.toString()}>
-      {(provided, snapshot) => (
-        <TaskItemWrapper
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          $dragging={snapshot.isDragging ? "true" : "false"}
-        >
-          <DragBackdrop
-            $dragging={snapshot.isDragging ? "true" : "false"}
-            $status={status}
-          />
+    <>
+      {addMode ? (
+        <TaskItemWrapper key={"addTaskItem"} $dragging={"false"}>
+          <DragBackdrop $dragging={"false"} $status={status} />
 
           <StyledTaskItem
             $status={status}
-            $dragging={snapshot.isDragging ? "true" : "false"}
+            $dragging={"false"}
+            $draggable="false"
             onMouseEnter={startHovering}
             onMouseLeave={endHovering}
           >
@@ -176,6 +167,7 @@ function TaskItem({
                 name={`tasksItem${id}`}
                 status={status}
                 disabled={isEditing || showDeleteModal}
+                isDragging={true}
               />
             </div>
 
@@ -208,8 +200,91 @@ function TaskItem({
             )}
           </StyledTaskItem>
         </TaskItemWrapper>
+      ) : (
+        <Draggable
+          shouldRespectForcePress
+          index={index!}
+          draggableId={id.toString()}
+        >
+          {(provided, snapshot) => {
+            if (snapshot.isDragging && delayRef.current) {
+              clearSetTimeout();
+            }
+            return (
+              <TaskItemWrapper
+                key={"showTaskItem"}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                $dragging={snapshot.isDragging ? "true" : "false"}
+              >
+                <DragBackdrop
+                  $dragging={snapshot.isDragging ? "true" : "false"}
+                  $status={status}
+                />
+
+                <StyledTaskItem
+                  $status={status}
+                  $dragging={snapshot.isDragging ? "true" : "false"}
+                  $draggable="true"
+                  onMouseEnter={startHovering}
+                  onMouseLeave={endHovering}
+                >
+                  {showDeleteModal && (
+                    <DeleteTaskConfirmModal
+                      status={status}
+                      onCancel={onCancelDelete}
+                      onConfirm={onConfirmDelete}
+                    />
+                  )}
+
+                  <div>
+                    <CheckBox
+                      onChange={onToggleDoneTask}
+                      name={`tasksItem${id}`}
+                      status={status}
+                      disabled={isEditing || showDeleteModal}
+                      isDragging={snapshot.isDragging}
+                    />
+                  </div>
+
+                  {isEditing ? (
+                    <StyledTextArea
+                      ref={inputRef}
+                      onChange={onEditInputChange}
+                      name={`editTask${id}`}
+                      $status={status}
+                    />
+                  ) : (
+                    <TaskItemText onClick={onEditTaskClick} $status={status}>
+                      {text}
+                    </TaskItemText>
+                  )}
+
+                  {isEditing && (
+                    <EditActionsBlock $status={status}>
+                      <button onClick={onCancelEdit}>Cancel</button>
+                      <EditBtn
+                        onClick={addMode ? onAdd : onEdit}
+                        $status={status}
+                      >
+                        {addMode ? "Add" : "Edit"}
+                      </EditBtn>
+                    </EditActionsBlock>
+                  )}
+
+                  {!isEditing && isHovering && (
+                    <RemoveTask onClick={onDeleteClick} $status={status}>
+                      <span>🗙</span>
+                    </RemoveTask>
+                  )}
+                </StyledTaskItem>
+              </TaskItemWrapper>
+            );
+          }}
+        </Draggable>
       )}
-    </Draggable>
+    </>
   );
 }
 

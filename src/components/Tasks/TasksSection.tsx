@@ -13,19 +13,27 @@ import { TASKS_LIST } from "../../../utils/dummy-data";
 import { useTasks } from "../../context/TasksContext";
 
 function TasksSection() {
-  const { addAllTasks, todoList, doingList, doneList, dragDropHandler } =
-    useTasks();
+  const {
+    addAllTasks,
+    todoList,
+    doingList,
+    doneList,
+    dragDropHandler,
+    setIsDragging,
+  } = useTasks();
 
-  const onDragDrop: OnDragEndResponder = (result) => {
+  const onDragStart = () => setIsDragging({ isDragging: true });
+
+  const onDragEnd: OnDragEndResponder = (result) => {
     const { source, destination } = result;
 
-    if (!destination) return;
+    if (!destination) return setIsDragging({ isDragging: false });
 
     if (
       source.droppableId === destination.droppableId &&
       source.index === destination.index
     )
-      return;
+      return setIsDragging({ isDragging: false });
 
     const sourceStatus = source.droppableId as TaskStatus;
     const destinationStatus = destination.droppableId as TaskStatus;
@@ -38,6 +46,8 @@ function TasksSection() {
       sourceIndex,
       destinationIndex,
     });
+
+    setIsDragging({ isDragging: false });
   };
 
   useEffect(() => {
@@ -50,7 +60,7 @@ function TasksSection() {
         <TaskListHeader />
 
         <TasksContainer>
-          <DragDropContext onDragEnd={onDragDrop}>
+          <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
             <TasksList
               key="tasksListTodo"
               title="Todo"

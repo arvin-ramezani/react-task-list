@@ -12,11 +12,13 @@ export const TaskItemWrapper = styled.div.attrs<{
 `;
 
 export const StyledTaskItem = styled.div.attrs<{
-  $dragging?: string;
+  $dragging?: "true" | "false";
   $status: TaskStatus;
+  $draggable: "true" | "false";
 }>((props) => ({
   $dragging: props.$dragging,
   $status: props.$status,
+  $draggable: props.$draggable,
 }))`
   display: flex;
   align-items: center;
@@ -26,9 +28,9 @@ export const StyledTaskItem = styled.div.attrs<{
   padding: 12px 10px;
   border-radius: 4px;
   position: relative;
-  cursor: grab;
   transition: transform 0.3s;
 
+  cursor: ${({ $draggable }) => ($draggable === "true" ? "grab" : "default")};
   rotate: ${({ $dragging }) => ($dragging === "true" ? "-3deg" : "0")};
 
   border: 1px solid ${({ theme, $status }) => theme.colors[$status].borderColor};

@@ -11,11 +11,7 @@ import {
 
 function App() {
   return (
-    <TasksContextProvider
-      todoList={initialTasksState.todoList}
-      doingList={initialTasksState.doingList}
-      doneList={initialTasksState.doneList}
-    >
+    <TasksContextProvider {...initialTasksState}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <TasksSection />

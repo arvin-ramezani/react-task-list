@@ -6,15 +6,24 @@ import {
   StyledLabel,
 } from "../../../styles/ui/CheckBox.styled";
 import { TaskStatus } from "../../../utils/types/tasks.types";
+import { useTasks } from "../../context/TasksContext";
 
 interface CheckBoxProps {
   name: string;
   status: TaskStatus;
   onChange: () => void;
   disabled?: boolean;
+  isDragging: boolean;
 }
 
-const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
+const CheckBox = ({
+  name,
+  status,
+  onChange,
+  disabled,
+  isDragging,
+}: CheckBoxProps) => {
+  const { isDragging: sss } = useTasks();
   const [checked, setChecked] = useState(status === TaskStatus.DONE);
 
   const onChangeHandler = () => {
@@ -27,6 +36,10 @@ const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
   useEffect(() => {
     setChecked(status === TaskStatus.DONE);
   }, [disabled]);
+
+  useEffect(() => {
+    return () => setChecked(status === TaskStatus.DONE);
+  }, [sss]);
 
   return (
     <StyledLabel htmlFor={name} onClick={onChangeHandler} disabled={disabled}>

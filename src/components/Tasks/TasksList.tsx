@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { StrictModeDroppable as Droppable } from "../ui/strictModeDropable";
+import { StrictModeDroppable as Droppable } from "../DragDrop/strictModeDroppable";
 import { TaskStatus, ITask } from "../../../utils/types/tasks.types";
 import {
   StyledTasksList,
@@ -15,6 +15,7 @@ interface TasksListProps {
   tasksList: ITask[];
   title: string;
   status: TaskStatus;
+  // stopTimer: boolean;
 }
 
 function TasksList({ tasksList, title, status }: TasksListProps) {
@@ -37,6 +38,8 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
               index={index}
               key={task.id}
               {...task}
+              // listIsDragging={snapshot.isDraggingOver}
+              // stopTimer={stopTimer}
               addMode={false}
               onExitAddMode={() => {}}
             />

@@ -13,12 +13,14 @@ interface IInitialTasksState {
   todoList: ITask[];
   doingList: ITask[];
   doneList: ITask[];
+  isDragging: boolean;
 }
 
 export const initialTasksState: IInitialTasksState = {
   todoList: [],
   doingList: [],
   doneList: [],
+  isDragging: false,
 };
 
 enum TasksReducerActionTypes {
@@ -32,6 +34,7 @@ enum TasksReducerActionTypes {
   SET_DOING_LIST = "setDoingList",
   SET_DONE_LIST = "setDoneList",
   DRAG_DROP = "dragDrop",
+  SET_IS_DRAGGING = "setIsDragging",
 }
 
 interface IAddAllTasksActionPayload {
@@ -74,6 +77,11 @@ interface IDragDropActionPayload {
   };
 }
 
+interface ISetIsDraggingActionPayload {
+  type: TasksReducerActionTypes.SET_IS_DRAGGING;
+  payload: { isDragging: boolean };
+}
+
 interface IReducerActionWithoutPayload {
   type: TasksReducerActionTypes;
 }
@@ -85,7 +93,8 @@ type ReducerActionType =
   | IEditTaskActionPayload
   | IDeleteTaskActionPayload
   | IAddTaskActionPayload
-  | IDragDropActionPayload;
+  | IDragDropActionPayload
+  | ISetIsDraggingActionPayload;
 
 const reducer = (
   state: IInitialTasksState,
@@ -97,20 +106,22 @@ const reducer = (
 
       if (localStorageData) {
         state = JSON.parse(localStorageData);
-
-        return state;
+        return { ...state, ...JSON.parse(localStorageData) };
       }
 
       state = {
+        ...state,
         todoList: payload.filter((t) => t.status === TaskStatus.TODO),
         doingList: payload.filter((t) => t.status === TaskStatus.DOING),
         doneList: payload.filter((t) => t.status === TaskStatus.DONE),
       };
 
       localStorage.setItem("tasks", JSON.stringify(state));
-      return state;
+      return { ...state };
 
     case TasksReducerActionTypes.DONE_TASK:
+      if (state.isDragging) return state;
+
       let { todoList, doingList, doneList } = state;
 
       const taskToDone = [...todoList, ...doingList].find(
@@ -135,9 +146,11 @@ const reducer = (
         "tasks",
         JSON.stringify({ todoList, doingList, doneList })
       );
-      return { todoList, doingList, doneList };
+      return { ...state, todoList, doingList, doneList };
 
     case TasksReducerActionTypes.UNDONE_TASK:
+      if (state.isDragging) return state;
+
       const taskToUndone = state.doneList.find((t) => t.id === payload.id);
 
       if (!taskToUndone) return state;
@@ -253,6 +266,9 @@ const reducer = (
 
       return state;
 
+    case TasksReducerActionTypes.SET_IS_DRAGGING:
+      return { ...state, isDragging: payload.isDragging };
+
     default:
       throw new Error("Invalid action type!");
   }
@@ -322,6 +338,16 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     []
   );
 
+  const setIsDragging = useCallback(
+    (setIsDraggingPayload: ISetIsDraggingActionPayload["payload"]) => {
+      dispatch({
+        type: TasksReducerActionTypes.SET_IS_DRAGGING,
+        payload: setIsDraggingPayload,
+      });
+    },
+    []
+  );
+
   return {
     state,
     addAllTasks,
@@ -331,6 +357,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     deleteTask,
     addTask,
     dragDropHandler,
+    setIsDragging,
   };
 };
 
@@ -345,6 +372,7 @@ const initialContextState: UseTasksContextType = {
   deleteTask: (payload: { id: number }) => {},
   addTask: (payload: { text: string; status: TaskStatus }) => {},
   dragDropHandler: (payload: IDragDropActionPayload["payload"]) => {},
+  setIsDragging: (payload: ISetIsDraggingActionPayload["payload"]) => {},
 };
 
 export const TasksContext =
@@ -369,6 +397,7 @@ type useTasksType = {
   todoList: IInitialTasksState["todoList"];
   doingList: IInitialTasksState["doingList"];
   doneList: IInitialTasksState["doneList"];
+  isDragging: IInitialTasksState["isDragging"];
   addAllTasks: (taskList: ITask[]) => void;
   doneTask: (payload: { id: number; currentStatus: TaskStatus }) => void;
   undoneTask: (payload: { id: number }) => void;
@@ -376,11 +405,12 @@ type useTasksType = {
   deleteTask: (payload: { id: number }) => void;
   addTask: (payload: { text: string; status: TaskStatus }) => void;
   dragDropHandler: (payload: IDragDropActionPayload["payload"]) => void;
+  setIsDragging: (payload: ISetIsDraggingActionPayload["payload"]) => void;
 };
 
 export const useTasks = (): useTasksType => {
   const {
-    state: { todoList, doingList, doneList },
+    state: { todoList, doingList, doneList, isDragging },
     addAllTasks,
     doneTask,
     undoneTask,
@@ -388,12 +418,14 @@ export const useTasks = (): useTasksType => {
     deleteTask,
     addTask,
     dragDropHandler,
+    setIsDragging,
   } = useContext(TasksContext);
 
   return {
     todoList,
     doingList,
     doneList,
+    isDragging,
     addAllTasks,
     doneTask,
     undoneTask,
@@ -401,5 +433,6 @@ export const useTasks = (): useTasksType => {
     deleteTask,
     addTask,
     dragDropHandler,
+    setIsDragging,
   };
 };
