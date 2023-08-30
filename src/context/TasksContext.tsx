@@ -19,6 +19,7 @@ import {
   IInitialTasksState,
   ISetIsDraggingActionPayload,
   IUndoneTaskActionPayload,
+  ReducerActionType,
   TasksReducerActionTypes,
 } from "../../utils/types/tasksReducer.types";
 import { LocalStorageDataName } from "../../utils/types/common.types";
@@ -122,6 +123,16 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     []
   );
 
+  const clearWaitList = useCallback((waitList: ReducerActionType[]) => {
+    waitList.forEach((action, _, currentList) => {
+      dispatch(action);
+      dispatch({
+        type: TasksReducerActionTypes.CLEAR_WAIT_LIST,
+        payload: currentList,
+      });
+    });
+  }, []);
+
   return {
     state,
     addAllTasks,
@@ -132,6 +143,7 @@ const useTasksContext = (initialState: IInitialTasksState) => {
     addTask,
     dragDropHandler,
     setIsDragging,
+    clearWaitList,
   };
 };
 
@@ -147,6 +159,7 @@ const initialContextState: UseTasksContextType = {
   addTask: (payload: { text: string; status: TaskStatus }) => {},
   dragDropHandler: (payload: IDragDropActionPayload["payload"]) => {},
   setIsDragging: (payload: ISetIsDraggingActionPayload["payload"]) => {},
+  clearWaitList: (payload: ReducerActionType[]) => {},
 };
 
 export const TasksContext =
@@ -172,6 +185,7 @@ type useTasksType = {
   doingList: IInitialTasksState["doingList"];
   doneList: IInitialTasksState["doneList"];
   isDragging: IInitialTasksState["isDragging"];
+  waitList: IInitialTasksState["waitList"];
   addAllTasks: (taskList: IAddAllTasksActionPayload["payload"]) => void;
   doneTask: (payload: IDoneTaskActionPayload["payload"]) => void;
   undoneTask: (payload: IUndoneTaskActionPayload["payload"]) => void;
@@ -180,11 +194,12 @@ type useTasksType = {
   addTask: (payload: IAddTaskActionPayload["payload"]) => void;
   dragDropHandler: (payload: IDragDropActionPayload["payload"]) => void;
   setIsDragging: (payload: ISetIsDraggingActionPayload["payload"]) => void;
+  clearWaitList: (payload: ReducerActionType[]) => void;
 };
 
 export const useTasks = (): useTasksType => {
   const {
-    state: { todoList, doingList, doneList, isDragging },
+    state: { todoList, doingList, doneList, isDragging, waitList },
     addAllTasks,
     doneTask,
     undoneTask,
@@ -193,13 +208,21 @@ export const useTasks = (): useTasksType => {
     addTask,
     dragDropHandler,
     setIsDragging,
+    clearWaitList,
   } = useContext(TasksContext);
+
+  useEffect(() => {
+    if (!isDragging && waitList.length > 0) {
+      clearWaitList(waitList);
+    }
+  }, [waitList.length, isDragging]);
 
   return {
     todoList,
     doingList,
     doneList,
     isDragging,
+    waitList,
     addAllTasks,
     doneTask,
     undoneTask,
@@ -208,5 +231,6 @@ export const useTasks = (): useTasksType => {
     addTask,
     dragDropHandler,
     setIsDragging,
+    clearWaitList,
   };
 };

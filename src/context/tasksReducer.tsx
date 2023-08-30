@@ -12,6 +12,7 @@ export const initialTasksState: IInitialTasksState = {
   todoList: [],
   doingList: [],
   doneList: [],
+  waitList: [],
   isDragging: false,
 };
 
@@ -37,8 +38,13 @@ export const tasksReducer = (
       return { ...state };
 
     case TasksReducerActionTypes.DONE_TASK:
-      // Todo: Save to waitList
-      if (state.isDragging) return state;
+      if (state.isDragging) {
+        state.waitList.push({
+          type,
+          payload,
+        });
+        return state;
+      }
 
       let { todoList, doingList, doneList } = state;
 
@@ -71,7 +77,10 @@ export const tasksReducer = (
       return state;
 
     case TasksReducerActionTypes.UNDONE_TASK:
-      if (state.isDragging) return state;
+      if (state.isDragging) {
+        state.waitList.push({ type, payload });
+        return state;
+      }
 
       const taskToUndone = state.doneList.find((t) => t.id === payload.id);
 
@@ -191,6 +200,16 @@ export const tasksReducer = (
 
     case TasksReducerActionTypes.SET_IS_DRAGGING:
       state = { ...state, isDragging: payload.isDragging };
+
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
+
+    case TasksReducerActionTypes.CLEAR_WAIT_LIST:
+      if (state.waitList.length >= 0) {
+        state.waitList.shift();
+      }
+
+      state = { ...state };
 
       saveToLocalStorage(LocalStorageDataName.TASKS, state);
       return state;

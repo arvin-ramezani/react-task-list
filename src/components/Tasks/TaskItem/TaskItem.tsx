@@ -9,7 +9,7 @@ import {
   StyledTaskItem,
   StyledTextArea,
   TaskItemText,
-  DragBackdrop,
+  DropPlaceHolder,
   TaskItemWrapper,
 } from "../../../../styles/components/Tasks/TaskItem.styled";
 import CheckBox from "../../ui/CheckBox";
@@ -64,7 +64,7 @@ function TaskItem({
     <>
       {addMode ? (
         <TaskItemWrapper key={"addTaskItem"} $dragging={"false"}>
-          <DragBackdrop $dragging={"false"} $status={status} />
+          <DropPlaceHolder $dragging={"false"} $status={status} />
 
           <StyledTaskItem
             $status={status}
@@ -137,7 +137,7 @@ function TaskItem({
                 {...provided.dragHandleProps}
                 $dragging={snapshot.isDragging ? "true" : "false"}
               >
-                <DragBackdrop
+                <DropPlaceHolder
                   $dragging={snapshot.isDragging ? "true" : "false"}
                   $status={status}
                 />

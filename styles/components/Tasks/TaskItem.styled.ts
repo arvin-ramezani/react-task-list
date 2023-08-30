@@ -36,7 +36,7 @@ export const StyledTaskItem = styled.div.attrs<{
   border: 1px solid ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;
 
-export const DragBackdrop = styled.div.attrs<{
+export const DropPlaceHolder = styled.div.attrs<{
   $status: TaskStatus;
   $dragging?: "true" | "false";
 }>((props) => ({

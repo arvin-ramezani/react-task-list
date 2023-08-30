@@ -4,6 +4,7 @@ export interface IInitialTasksState {
   todoList: ITask[];
   doingList: ITask[];
   doneList: ITask[];
+  waitList: ReducerActionType[];
   isDragging: boolean;
 }
 
@@ -20,6 +21,7 @@ export enum TasksReducerActionTypes {
   SET_DONE_LIST = "setDoneList",
   DRAG_DROP = "dragDrop",
   SET_IS_DRAGGING = "setIsDragging",
+  CLEAR_WAIT_LIST = "clearWaitList",
 }
 
 export interface ISetStateActionPayload {
@@ -72,9 +74,14 @@ export interface ISetIsDraggingActionPayload {
   payload: { isDragging: boolean };
 }
 
-export interface IReducerActionWithoutPayload {
-  type: TasksReducerActionTypes;
+export interface IClearWaitListActionPayload {
+  type: TasksReducerActionTypes.CLEAR_WAIT_LIST;
+  payload: IInitialTasksState["waitList"];
 }
+
+// export interface IReducerActionWithoutPayload {
+//   type: TasksReducerActionTypes;
+// }
 
 export type ReducerActionType =
   | ISetStateActionPayload
@@ -85,4 +92,5 @@ export type ReducerActionType =
   | IDeleteTaskActionPayload
   | IAddTaskActionPayload
   | IDragDropActionPayload
-  | ISetIsDraggingActionPayload;
+  | ISetIsDraggingActionPayload
+  | IClearWaitListActionPayload;
