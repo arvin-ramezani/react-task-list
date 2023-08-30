@@ -3,6 +3,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
 } from "react";
 
@@ -20,16 +21,33 @@ import {
   IUndoneTaskActionPayload,
   TasksReducerActionTypes,
 } from "../../utils/types/tasksReducer.types";
+import { LocalStorageDataName } from "../../utils/types/common.types";
+import { getFromLocalStorage } from "../../utils/helpers/localStorage";
 
 const useTasksContext = (initialState: IInitialTasksState) => {
   const [state, dispatch] = useReducer(tasksReducer, initialState);
 
   const addAllTasks = useCallback(
     (tasksList: IAddAllTasksActionPayload["payload"]) => {
-      dispatch({
-        type: TasksReducerActionTypes.ADD_ALL_TASKS,
-        payload: tasksList,
-      });
+      const localStorageState = getFromLocalStorage(
+        LocalStorageDataName.TASKS
+      ) as IInitialTasksState;
+
+      if (localStorageState) {
+        dispatch({
+          type: TasksReducerActionTypes.SET_STATE,
+          payload: localStorageState,
+        });
+
+        return;
+      } else {
+        dispatch({
+          type: TasksReducerActionTypes.ADD_ALL_TASKS,
+          payload: tasksList,
+        });
+
+        return;
+      }
     },
     []
   );

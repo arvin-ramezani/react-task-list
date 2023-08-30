@@ -8,6 +8,7 @@ export interface IInitialTasksState {
 }
 
 export enum TasksReducerActionTypes {
+  SET_STATE = "setState",
   ADD_ALL_TASKS = "addAllTasks",
   DONE_TASK = "doneTask",
   UNDONE_TASK = "unDoneTask",
@@ -20,6 +21,12 @@ export enum TasksReducerActionTypes {
   DRAG_DROP = "dragDrop",
   SET_IS_DRAGGING = "setIsDragging",
 }
+
+export interface ISetStateActionPayload {
+  type: TasksReducerActionTypes.SET_STATE;
+  payload: IInitialTasksState;
+}
+
 export interface IAddAllTasksActionPayload {
   type: TasksReducerActionTypes.ADD_ALL_TASKS;
   payload: ITask[];
@@ -70,6 +77,7 @@ export interface IReducerActionWithoutPayload {
 }
 
 export type ReducerActionType =
+  | ISetStateActionPayload
   | IAddAllTasksActionPayload
   | IDoneTaskActionPayload
   | IUndoneTaskActionPayload

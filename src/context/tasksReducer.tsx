@@ -1,4 +1,6 @@
 import { createId } from "../../utils/helpers/createId";
+import { saveToLocalStorage } from "../../utils/helpers/localStorage";
+import { LocalStorageDataName } from "../../utils/types/common.types";
 import { ITask, TaskStatus } from "../../utils/types/tasks.types";
 import {
   IInitialTasksState,
@@ -18,14 +20,12 @@ export const tasksReducer = (
   { payload, type }: ReducerActionType
 ): IInitialTasksState => {
   switch (type) {
+    case TasksReducerActionTypes.SET_STATE:
+      console.log("reducer");
+
+      return { ...payload };
+
     case TasksReducerActionTypes.ADD_ALL_TASKS:
-      const localStorageData = localStorage.getItem("tasks");
-
-      if (localStorageData) {
-        state = JSON.parse(localStorageData);
-        return { ...state, ...JSON.parse(localStorageData) };
-      }
-
       state = {
         ...state,
         todoList: payload.filter((t) => t.status === TaskStatus.TODO),
@@ -33,10 +33,11 @@ export const tasksReducer = (
         doneList: payload.filter((t) => t.status === TaskStatus.DONE),
       };
 
-      localStorage.setItem("tasks", JSON.stringify(state));
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
       return { ...state };
 
     case TasksReducerActionTypes.DONE_TASK:
+      // Todo: Save to waitList
       if (state.isDragging) return state;
 
       let { todoList, doingList, doneList } = state;
@@ -59,11 +60,15 @@ export const tasksReducer = (
 
       doneList.unshift(taskToDone);
 
-      localStorage.setItem(
-        "tasks",
-        JSON.stringify({ todoList, doingList, doneList })
-      );
-      return { ...state, todoList, doingList, doneList };
+      state = {
+        ...state,
+        todoList,
+        doingList,
+        doneList,
+      };
+
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
 
     case TasksReducerActionTypes.UNDONE_TASK:
       if (state.isDragging) return state;
@@ -76,9 +81,8 @@ export const tasksReducer = (
 
       state.todoList.unshift({ ...taskToUndone, status: TaskStatus.TODO });
 
-      localStorage.setItem("tasks", JSON.stringify(state));
-
-      return { ...state };
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
 
     case TasksReducerActionTypes.EDIT_TASK:
       const taskToEdit = [
@@ -109,9 +113,10 @@ export const tasksReducer = (
         });
       }
 
-      localStorage.setItem("tasks", JSON.stringify({ ...state }));
+      state = { ...state };
 
-      return { ...state };
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
 
     case TasksReducerActionTypes.DELETE_TASK:
       const taskToDelete = [
@@ -136,9 +141,10 @@ export const tasksReducer = (
         state.doneList = state.doneList.filter((t) => t.id !== taskToDelete.id);
       }
 
-      localStorage.setItem("tasks", JSON.stringify({ ...state }));
+      state = { ...state };
 
-      return { ...state };
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
 
     case TasksReducerActionTypes.ADD_TASK:
       const taskToAdd: ITask = {
@@ -159,9 +165,10 @@ export const tasksReducer = (
         state.doneList.push(taskToAdd);
       }
 
-      localStorage.setItem("tasks", JSON.stringify({ ...state }));
+      state = { ...state };
 
-      return { ...state };
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
 
     case TasksReducerActionTypes.DRAG_DROP:
       const { sourceStatus, sourceIndex, destinationStatus, destinationIndex } =
@@ -179,12 +186,14 @@ export const tasksReducer = (
 
       listToDrop.splice(destinationIndex, 0, taskToDrop);
 
-      localStorage.setItem("tasks", JSON.stringify(state));
-
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
       return state;
 
     case TasksReducerActionTypes.SET_IS_DRAGGING:
-      return { ...state, isDragging: payload.isDragging };
+      state = { ...state, isDragging: payload.isDragging };
+
+      saveToLocalStorage(LocalStorageDataName.TASKS, state);
+      return state;
 
     default:
       throw new Error("Invalid action type!");
