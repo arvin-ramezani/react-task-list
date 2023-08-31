@@ -7,6 +7,8 @@ import React, {
 
 import { useTasks } from "../../../context/TasksContext";
 import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
+import { validateTaskText } from "../../../../utils/helpers/validate";
+import { splitTaskTextToMultiLine } from "../../../../utils/helpers/splitMultilineTaskText";
 
 interface ITaskItemLogic {
   addMode?: boolean;
@@ -52,9 +54,17 @@ function TaskItemLogic({
   const onAdd = () => {
     const text = inputRef.current?.value;
 
-    if (!text || text?.trim() === "") return;
+    const textIsValid = validateTaskText(text);
+    if (!textIsValid) return onExitAddMode && onExitAddMode();
 
-    addTask({ status, text });
+    const splittedText = splitTaskTextToMultiLine(text!);
+
+    splittedText.forEach((text) => {
+      if (validateTaskText(text)) {
+        addTask({ status, text });
+      }
+    });
+
     onExitAddMode && onExitAddMode();
   };
 
