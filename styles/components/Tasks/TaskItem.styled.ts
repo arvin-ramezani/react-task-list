@@ -157,6 +157,10 @@ export const RemoveTask = styled.div.attrs<{
   font-weight: 500;
   width: 24px;
   height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  padding: 0.5rem;
+  padding-right: 0;
 
   color: ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;

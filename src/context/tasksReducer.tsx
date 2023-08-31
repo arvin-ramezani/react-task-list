@@ -22,8 +22,6 @@ export const tasksReducer = (
 ): IInitialTasksState => {
   switch (type) {
     case TasksReducerActionTypes.SET_STATE:
-      console.log("reducer");
-
       return { ...payload };
 
     case TasksReducerActionTypes.ADD_ALL_TASKS:

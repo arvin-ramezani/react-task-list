@@ -29,6 +29,7 @@ export const StyledDeleteTask = styled.div.attrs<{
     font-size: inherit;
     font-weight: inherit;
     color: inherit;
+    padding: 0.5rem 1rem;
   }
 
   & button:first-child {
