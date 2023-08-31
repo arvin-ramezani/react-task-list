@@ -27,13 +27,13 @@ export const tasksReducer = (
     case TasksReducerActionTypes.ADD_ALL_TASKS:
       state = {
         ...state,
-        todoList: payload.filter((t) => t.status === TaskStatus.TODO),
-        doingList: payload.filter((t) => t.status === TaskStatus.DOING),
-        doneList: payload.filter((t) => t.status === TaskStatus.DONE),
+        todoList: payload.todoList,
+        doingList: payload.doingList,
+        doneList: payload.doneList,
       };
 
       saveToLocalStorage(LocalStorageDataName.TASKS, state);
-      return { ...state };
+      return state;
 
     case TasksReducerActionTypes.DONE_TASK:
       if (state.isDragging) {

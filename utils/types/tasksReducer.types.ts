@@ -31,7 +31,9 @@ export interface ISetStateActionPayload {
 
 export interface IAddAllTasksActionPayload {
   type: TasksReducerActionTypes.ADD_ALL_TASKS;
-  payload: ITask[];
+  payload:
+    | Omit<IInitialTasksState, "isDragging" | "waitList">
+    | IInitialTasksState;
 }
 
 export interface IDoneTaskActionPayload {
@@ -78,10 +80,6 @@ export interface IClearWaitListActionPayload {
   type: TasksReducerActionTypes.CLEAR_WAIT_LIST;
   payload: IInitialTasksState["waitList"];
 }
-
-// export interface IReducerActionWithoutPayload {
-//   type: TasksReducerActionTypes;
-// }
 
 export type ReducerActionType =
   | ISetStateActionPayload
