@@ -1,6 +1,6 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
-export const StyledTasksSection = styled.section`
+export const StyledTasksSection = styled.main`
   padding: 2rem 0;
 `;
 

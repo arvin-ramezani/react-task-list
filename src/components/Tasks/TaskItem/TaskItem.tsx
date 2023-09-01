@@ -63,15 +63,17 @@ function TaskItem({
   return (
     <>
       {addMode ? (
-        <TaskItemWrapper key={"addTaskItem"} $dragging={"false"}>
+        <TaskItemWrapper
+          key={"addTaskItem"}
+          onMouseEnter={startHovering}
+          onMouseLeave={endHovering}
+        >
           <DropPlaceHolder $dragging={"false"} $status={status} />
 
           <StyledTaskItem
             $status={status}
             $dragging={"false"}
             $draggable="false"
-            onMouseEnter={startHovering}
-            onMouseLeave={endHovering}
           >
             {showDeleteModal && (
               <DeleteTaskConfirmModal
@@ -135,7 +137,8 @@ function TaskItem({
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
-                $dragging={snapshot.isDragging ? "true" : "false"}
+                onMouseEnter={startHovering}
+                onMouseLeave={endHovering}
               >
                 <DropPlaceHolder
                   $dragging={snapshot.isDragging ? "true" : "false"}
@@ -146,8 +149,6 @@ function TaskItem({
                   $status={status}
                   $dragging={snapshot.isDragging ? "true" : "false"}
                   $draggable="true"
-                  onMouseEnter={startHovering}
-                  onMouseLeave={endHovering}
                 >
                   {showDeleteModal && (
                     <DeleteTaskConfirmModal
@@ -191,8 +192,20 @@ function TaskItem({
                     </EditActionsBlock>
                   )}
 
+                  {/* <RemoveTask
+                    data-testid="delete-icon"
+                    onClick={onDeleteClick}
+                    $status={status}
+                  >
+                    <span>🗙</span>
+                  </RemoveTask> */}
+
                   {!isEditing && isHovering && (
-                    <RemoveTask onClick={onDeleteClick} $status={status}>
+                    <RemoveTask
+                      data-testid="delete-icon"
+                      onClick={onDeleteClick}
+                      $status={status}
+                    >
                       <span>🗙</span>
                     </RemoveTask>
                   )}

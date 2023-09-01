@@ -1,23 +1,15 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
 
-export const StyledAddTask = styled.div.attrs<{
-  $absolute: "true" | "false";
-}>((props) => ({
-  $absolute: props.$absolute,
-}))`
+export const StyledAddTask = styled.div<{ $absolute: "true" | "false" }>`
   position: ${({ $absolute }) =>
     $absolute === "true" ? "absolute" : "static"};
   bottom: 10px;
   left: 16px;
 `;
 
-export const NewTaskBtn = styled.button.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const NewTaskBtn = styled.button<{ $status: TaskStatus }>`
   background: transparent;
   border: none;
   cursor: pointer;

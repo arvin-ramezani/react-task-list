@@ -112,6 +112,9 @@ function TaskItemLogic({
   const onToggleDoneTask = () => {
     setIsDone((prev) => !prev);
 
+    doneTask({ id, currentStatus: status });
+    return;
+
     clearSetTimeout();
 
     // @ts-ignore
