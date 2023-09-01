@@ -108,8 +108,8 @@ function TaskItem({
             {isEditing && (
               <EditActionsBlock $status={status}>
                 <button onClick={onCancelEdit}>Cancel</button>
-                <EditBtn onClick={addMode ? onAdd : onEdit} $status={status}>
-                  {addMode ? "Add" : "Edit"}
+                <EditBtn onClick={onAdd} $status={status}>
+                  Add
                 </EditBtn>
               </EditActionsBlock>
             )}
@@ -175,7 +175,11 @@ function TaskItem({
                       $status={status}
                     />
                   ) : (
-                    <TaskItemText onClick={onEditTaskClick} $status={status}>
+                    <TaskItemText
+                      data-testid="task text"
+                      onClick={onEditTaskClick}
+                      $status={status}
+                    >
                       {text}
                     </TaskItemText>
                   )}
@@ -183,22 +187,11 @@ function TaskItem({
                   {isEditing && (
                     <EditActionsBlock $status={status}>
                       <button onClick={onCancelEdit}>Cancel</button>
-                      <EditBtn
-                        onClick={addMode ? onAdd : onEdit}
-                        $status={status}
-                      >
-                        {addMode ? "Add" : "Edit"}
+                      <EditBtn onClick={onEdit} $status={status}>
+                        Edit
                       </EditBtn>
                     </EditActionsBlock>
                   )}
-
-                  {/* <RemoveTask
-                    data-testid="delete-icon"
-                    onClick={onDeleteClick}
-                    $status={status}
-                  >
-                    <span>🗙</span>
-                  </RemoveTask> */}
 
                   {!isEditing && isHovering && (
                     <RemoveTask
