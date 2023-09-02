@@ -1,46 +1,15 @@
-import React from "react";
-import {
-  render,
-  screen,
-  cleanup,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ThemeProvider } from "styled-components";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-import TaskItem from "../../../src/components/Tasks/TaskItem/TaskItem";
 import { TASKS_LIST } from "../../../utils/dummy-data";
-import GlobalStyle from "../../../styles/globalStyles";
-import theme from "../../../styles/theme";
-import { TasksContextProvider } from "../../../src/context/TasksContext";
-import { initialTasksState } from "../../../src/context/tasksReducer";
-import { ITask, TaskStatus } from "../../../utils/types/tasks.types";
+import { TaskStatus } from "../../../utils/types/tasks.types";
+import { renderTaskItemWithProviders } from "../../helpers/renderUtils";
 
 import "jest-styled-components";
 
-const renderWithProviders = (taskProp: ITask = TASKS_LIST[0]) => {
-  return render(
-    <TasksContextProvider {...initialTasksState}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <DragDropContext onDragEnd={() => {}}>
-          <Droppable droppableId="test">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <TaskItem {...taskProp} addMode={false} index={0} />
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </ThemeProvider>
-    </TasksContextProvider>
-  );
-};
-
 describe("<TaskItem />", () => {
   it("Should show correct task text and checkbox", async () => {
-    renderWithProviders();
+    renderTaskItemWithProviders();
 
     const text = TASKS_LIST[0].text;
 
@@ -58,7 +27,7 @@ describe("<TaskItem />", () => {
 
   it("Should show close(*) icon button when user hovers,", async () => {
     const user = userEvent.setup();
-    renderWithProviders();
+    renderTaskItemWithProviders();
 
     const taskItemName =
       /Start with meditation, exercise & breakfast for a productive day/i;
@@ -76,7 +45,7 @@ describe("<TaskItem />", () => {
       status: TaskStatus.DONE,
     };
 
-    const { getByRole } = renderWithProviders(taskItem);
+    const { getByRole } = renderTaskItemWithProviders(taskItem);
 
     const checkbox = getByRole("checkbox", { hidden: true });
     const taskText = screen.getByText(/start with meditation/i);
@@ -86,7 +55,7 @@ describe("<TaskItem />", () => {
   });
 
   it("Should not have checked checkbox and line-through style for 'todo' task item", async () => {
-    renderWithProviders();
+    renderTaskItemWithProviders();
 
     const checkbox = screen.getByRole("checkbox", { hidden: true });
     const taskText = screen.getByText(/start with meditation/i);
@@ -97,7 +66,7 @@ describe("<TaskItem />", () => {
 
   it("Should show textarea with value of task text, Edit and Cancel buttons with one click on task text", async () => {
     const user = userEvent.setup();
-    renderWithProviders();
+    renderTaskItemWithProviders();
 
     const taskText = TASKS_LIST[0].text;
 
@@ -117,7 +86,7 @@ describe("<TaskItem />", () => {
 
   it("Can show textarea and get the user typed value", async () => {
     const user = userEvent.setup();
-    renderWithProviders();
+    renderTaskItemWithProviders();
 
     const taskText = TASKS_LIST[0].text;
 
