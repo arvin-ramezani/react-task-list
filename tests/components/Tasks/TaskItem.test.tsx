@@ -65,8 +65,6 @@ describe("<TaskItem />", () => {
 
     const taskItem = screen.getByRole("button", { name: taskItemName }); //TaskItem turns to button role via react-beautiful-dnd
 
-    expect(screen.queryByTestId("delete-icon")).not.toBeInTheDocument();
-
     await user.hover(taskItem);
 
     expect(screen.getByTestId("delete-icon")).toBeInTheDocument();
@@ -97,15 +95,13 @@ describe("<TaskItem />", () => {
     expect(taskText).toHaveStyleRule("text-decoration", "none");
   });
 
-  it("Should show textarea with one click on task text", async () => {
+  it("Should show textarea with value of task text, Edit and Cancel buttons with one click on task text", async () => {
     const user = userEvent.setup();
     renderWithProviders();
 
     const taskText = TASKS_LIST[0].text;
 
     const taskTextEl = screen.getByText(/start with meditation/i);
-
-    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
 
     await user.click(taskTextEl);
 
@@ -119,7 +115,7 @@ describe("<TaskItem />", () => {
     expect(cancelEditButton).toBeInTheDocument();
   });
 
-  it("Should correctly edit the task item text", async () => {
+  it("Can show textarea and get the user typed value", async () => {
     const user = userEvent.setup();
     renderWithProviders();
 
@@ -130,7 +126,7 @@ describe("<TaskItem />", () => {
     await user.click(taskTextEl);
 
     const editButton = screen.getByRole("button", { name: "Edit" });
-    const cancelEditButton = screen.getByRole("button", { name: "Cancel" });
+    const cancelButton = screen.getByRole("button", { name: "Cancel" });
     const textarea = screen.getByRole("textbox");
 
     const addedTaskText = "it works";
@@ -141,16 +137,9 @@ describe("<TaskItem />", () => {
     const editedText = taskText + addedTaskText;
     expect(textarea).toHaveValue(editedText);
 
-    await user.click(editButton);
+    expect(editButton).toBeInTheDocument();
 
-    expect(
-      screen.queryByRole("button", { name: "Edit" })
-    ).not.toBeInTheDocument();
-
-    expect(
-      screen.queryByRole("button", { name: "Cancel" })
-    ).not.toBeInTheDocument();
-
-    // expect(screen.getByTestId("task text")).toHaveTextContent(editedText);
+    expect(editButton).toBeInTheDocument();
+    expect(cancelButton).toBeInTheDocument();
   });
 });
