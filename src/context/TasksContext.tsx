@@ -157,15 +157,15 @@ type UseTasksContextType = ReturnType<typeof useTasksContext>;
 
 const initialContextState: UseTasksContextType = {
   state: initialTasksState,
-  addAllTasks: (tasksList: ITask[]) => {},
-  doneTask: (payload: { id: number; currentStatus: TaskStatus }) => {},
-  undoneTask: (payload: { id: number }) => {},
-  editTask: (payload: { id: number; text: string }) => {},
-  deleteTask: (payload: { id: number }) => {},
-  addTask: (payload: { text: string; status: TaskStatus }) => {},
-  dragDropHandler: (payload: IDragDropActionPayload["payload"]) => {},
-  setIsDragging: (payload: ISetIsDraggingActionPayload["payload"]) => {},
-  clearWaitList: (payload: ReducerActionType[]) => {},
+  addAllTasks: (_: ITask[]) => {},
+  doneTask: (_: IDoneTaskActionPayload["payload"]) => {},
+  undoneTask: (_: IUndoneTaskActionPayload["payload"]) => {},
+  editTask: (_: IEditTaskActionPayload["payload"]) => {},
+  deleteTask: (_: IDeleteTaskActionPayload["payload"]) => {},
+  addTask: (_: IAddTaskActionPayload["payload"]) => {},
+  dragDropHandler: (_: IDragDropActionPayload["payload"]) => {},
+  setIsDragging: (_: ISetIsDraggingActionPayload["payload"]) => {},
+  clearWaitList: (_: ReducerActionType[]) => {},
 };
 
 export const TasksContext =
