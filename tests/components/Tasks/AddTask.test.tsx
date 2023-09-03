@@ -1,18 +1,12 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { TASKS_LIST } from "../../../utils/dummy-data";
-import { TaskStatus } from "../../../utils/types/tasks.types";
-import {
-  renderAddTaskWithProviders,
-  renderTaskItemWithProviders,
-} from "../../helpers/renderUtils";
+import { renderAddTaskWithProviders } from "../../helpers/renderUtils";
 
 describe("<AddTask />", () => {
   it("Should show a button to add a task", () => {
     renderAddTaskWithProviders();
 
-    // expect(screen.getByText("New")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /new/i })).toBeInTheDocument();
   });
 

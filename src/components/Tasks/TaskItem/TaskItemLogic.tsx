@@ -25,7 +25,8 @@ function TaskItemLogic({
   text,
   onExitAddMode,
 }: ITaskItemLogic) {
-  const { doneTask, undoneTask, editTask, deleteTask, addTask } = useTasks();
+  const { doneTask, undoneTask, editTask, deleteTask, addTask, isDragging } =
+    useTasks();
   const [isHovering, setIsHovering] = useState(false);
   const [isEditing, setIsEditing] = useState(addMode || false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
