@@ -135,7 +135,7 @@ function TaskItem({
                 {...provided.dragHandleProps}
                 onMouseEnter={startHovering}
                 onMouseLeave={endHovering}
-                aria-label="task item"
+                aria-label={`${status} task item`}
               >
                 <DropPlaceHolder
                   $dragging={snapshot.isDragging ? "true" : "false"}
@@ -170,6 +170,7 @@ function TaskItem({
                       onChange={onEditInputChange}
                       name={`editTask${id}`}
                       $status={status}
+                      aria-label="edit task"
                     />
                   ) : (
                     <TaskItemText

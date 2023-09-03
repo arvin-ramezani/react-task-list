@@ -12,6 +12,7 @@ import { ITask, TaskStatus } from "../../utils/types/tasks.types";
 import { initialTasksState } from "../../src/context/tasksReducer";
 import AddTask from "../../src/components/Tasks/AddTask/AddTask";
 import TasksList from "../../src/components/Tasks/TaskList/TasksList";
+import TasksSection from "../../src/components/Tasks/TaskSection/TasksSection";
 
 export const renderTaskItemWithProviders = (
   taskProp: ITask = TASKS_LIST[0]
@@ -79,7 +80,7 @@ export const renderTaskListWithProviders = ({
   );
 };
 
-export const renderMultiTaskListWithProviders = (
+export const renderTaskSectionWithProviders = (
   title: string = "Todo",
   taskList: ITask[] = TASKS_LIST,
   status: TaskStatus = TaskStatus.TODO
@@ -90,14 +91,7 @@ export const renderMultiTaskListWithProviders = (
     <TasksContextProvider {...initialTasksState}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <DragDropContext onDragEnd={() => {}}>
-          <TasksList
-            key="tasksListTodo"
-            title={title}
-            status={status}
-            tasksList={taskList || filteredList}
-          />
-        </DragDropContext>
+        <TasksSection />
       </ThemeProvider>
     </TasksContextProvider>
   );
