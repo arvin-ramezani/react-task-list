@@ -90,7 +90,7 @@ function TaskItemLogic({
   const onEditInputChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     if (!inputRef.current) return;
 
-    inputRef.current.value = e.target.value;
+    // inputRef.current.value = e.target.value;
   };
 
   const onEditTaskClick: MouseEventHandler<HTMLParagraphElement> = (e) => {

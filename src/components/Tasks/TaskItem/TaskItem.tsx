@@ -54,6 +54,7 @@ function TaskItem({
   } = TaskItemLogic({ id, text, status, addMode, onExitAddMode });
 
   useEffect(() => {
+    console.log(id);
     if (isEditing && inputRef.current) {
       inputRef.current.value = text;
       inputRef.current.focus({});
@@ -86,24 +87,19 @@ function TaskItem({
             <div>
               <CheckBox
                 onChange={onToggleDoneTask}
-                name={`tasksItem${id}`}
+                name={"addTask"}
                 status={status}
                 disabled={isEditing || showDeleteModal}
               />
             </div>
 
-            {isEditing ? (
-              <StyledTextArea
-                ref={inputRef}
-                onChange={onEditInputChange}
-                name={`editTask${id}`}
-                $status={status}
-              />
-            ) : (
-              <TaskItemText onClick={onEditTaskClick} $status={status}>
-                {text}
-              </TaskItemText>
-            )}
+            <StyledTextArea
+              ref={inputRef}
+              // onChange={onEditInputChange}
+              name={`newTask`}
+              aria-label={"newTask"}
+              $status={status}
+            />
 
             {isEditing && (
               <EditActionsBlock $status={status}>
@@ -139,6 +135,7 @@ function TaskItem({
                 {...provided.dragHandleProps}
                 onMouseEnter={startHovering}
                 onMouseLeave={endHovering}
+                aria-label="task item"
               >
                 <DropPlaceHolder
                   $dragging={snapshot.isDragging ? "true" : "false"}

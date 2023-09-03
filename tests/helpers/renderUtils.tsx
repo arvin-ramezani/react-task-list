@@ -11,6 +11,7 @@ import { TASKS_LIST } from "../../utils/dummy-data";
 import { ITask, TaskStatus } from "../../utils/types/tasks.types";
 import { initialTasksState } from "../../src/context/tasksReducer";
 import AddTask from "../../src/components/Tasks/AddTask/AddTask";
+import TasksList from "../../src/components/Tasks/TaskList/TasksList";
 
 export const renderTaskItemWithProviders = (
   taskProp: ITask = TASKS_LIST[0]
@@ -46,6 +47,56 @@ export const renderAddTaskWithProviders = (taskProp: ITask = TASKS_LIST[0]) => {
               </div>
             )}
           </Droppable>
+        </DragDropContext>
+      </ThemeProvider>
+    </TasksContextProvider>
+  );
+};
+
+export const renderTaskListWithProviders = ({
+  title,
+  taskList,
+  status,
+}: {
+  title: string;
+  taskList: ITask[];
+  status: TaskStatus;
+}) => {
+  return render(
+    <TasksContextProvider {...initialTasksState}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <DragDropContext onDragEnd={() => {}}>
+          <TasksList
+            key="tasksListTodo"
+            title={title}
+            status={status}
+            tasksList={taskList}
+          />
+        </DragDropContext>
+      </ThemeProvider>
+    </TasksContextProvider>
+  );
+};
+
+export const renderMultiTaskListWithProviders = (
+  title: string = "Todo",
+  taskList: ITask[] = TASKS_LIST,
+  status: TaskStatus = TaskStatus.TODO
+) => {
+  const filteredList = taskList.filter((t) => t.status === status);
+
+  return render(
+    <TasksContextProvider {...initialTasksState}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <DragDropContext onDragEnd={() => {}}>
+          <TasksList
+            key="tasksListTodo"
+            title={title}
+            status={status}
+            tasksList={taskList || filteredList}
+          />
         </DragDropContext>
       </ThemeProvider>
     </TasksContextProvider>
