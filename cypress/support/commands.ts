@@ -1,40 +1,59 @@
 /// <reference types="cypress" />
-// ***********************************************
 
 import "cypress-real-events";
 
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      /** Custom command to drag subject to target */
+      drag(target: string, options?: Partial<TypeOptions>): Chainable<Element>;
+    }
+  }
+}
+
+/** Custom command `cy.drag` */
+
+// REFERENCE
+// https://stackoverflow.com/questions/70024270/cypress-drag-and-drop-not-working-on-a-react-based-website
+
+Cypress.Commands.add(
+  "drag",
+  { prevSubject: "element" },
+  (
+    subject: Cypress.JQueryWithSelector<HTMLElement>,
+    target: string,
+    _options?: Partial<Cypress.TypeOptions>
+  ) => {
+    const BUTTON_INDEX = 0;
+    const SLOPPY_CLICK_THRESHOLD = 10;
+
+    cy.get(target)
+      .first()
+      .then(($target) => {
+        let coordsDrop = $target[0].getBoundingClientRect();
+
+        const coordsDrag = subject[0].getBoundingClientRect();
+        cy.wrap(subject)
+          .trigger("mousedown", {
+            button: BUTTON_INDEX,
+            clientX: coordsDrag.x,
+            clientY: coordsDrag.y,
+            force: true,
+          })
+          .trigger("mousemove", {
+            button: BUTTON_INDEX,
+            clientX: coordsDrag.x + SLOPPY_CLICK_THRESHOLD,
+            clientY: coordsDrag.y,
+            force: true,
+          });
+        cy.get("body")
+          .trigger("mousemove", {
+            button: BUTTON_INDEX,
+            clientX: coordsDrop.x,
+            clientY: coordsDrop.y,
+            force: true,
+          })
+          .trigger("mouseup");
+      });
+  }
+);

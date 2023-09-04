@@ -5,7 +5,12 @@
     "module": "esnext",
     "moduleResolution": "node",
     "allowJs": true,
-    "types": ["cypress", "@testing-library/cypress", "cypress-real-events"],
+    "types": [
+      "cypress",
+      "@testing-library/cypress",
+      "cypress-real-events",
+      "@4tw/cypress-drag-drop"
+    ],
     "lib": ["dom", "esnext"],
     "strict": true,
     "sourceMap": false,
