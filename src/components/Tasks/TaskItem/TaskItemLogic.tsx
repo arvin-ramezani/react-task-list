@@ -103,11 +103,11 @@ function TaskItemLogic({
   };
 
   const startHovering = () => {
-    setIsHovering(true);
+    return setIsHovering(() => true);
   };
 
   const endHovering = () => {
-    setIsHovering(false);
+    return setIsHovering(() => false);
   };
 
   const onToggleDoneTask = () => {

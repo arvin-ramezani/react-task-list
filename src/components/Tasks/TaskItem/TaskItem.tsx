@@ -54,7 +54,6 @@ function TaskItem({
   } = TaskItemLogic({ id, text, status, addMode, onExitAddMode });
 
   useEffect(() => {
-    console.log(id);
     if (isEditing && inputRef.current) {
       inputRef.current.value = text;
       inputRef.current.focus({});
@@ -68,6 +67,7 @@ function TaskItem({
           key={"addTaskItem"}
           onMouseEnter={startHovering}
           onMouseLeave={endHovering}
+          data-cy={`${status}-add-task-${id}`}
         >
           <DropPlaceHolder $dragging={"false"} $status={status} />
 
@@ -81,6 +81,7 @@ function TaskItem({
                 status={status}
                 onCancel={onCancelDelete}
                 onConfirm={onConfirmDelete}
+                id={id.toString()}
               />
             )}
 
@@ -90,6 +91,7 @@ function TaskItem({
                 name={"addTask"}
                 status={status}
                 disabled={isEditing || showDeleteModal}
+                id={id.toString()}
               />
             </div>
 
@@ -104,6 +106,7 @@ function TaskItem({
             {isEditing && (
               <EditActionsBlock $status={status}>
                 <button onClick={onCancelEdit}>Cancel</button>
+
                 <EditBtn onClick={onAdd} $status={status}>
                   Add
                 </EditBtn>
@@ -111,7 +114,11 @@ function TaskItem({
             )}
 
             {!isEditing && isHovering && (
-              <RemoveTask onClick={onDeleteClick} $status={status}>
+              <RemoveTask
+                aria-label="delete add item"
+                onClick={onDeleteClick}
+                $status={status}
+              >
                 <span>🗙</span>
               </RemoveTask>
             )}
@@ -136,6 +143,7 @@ function TaskItem({
                 onMouseEnter={startHovering}
                 onMouseLeave={endHovering}
                 aria-label={`${status} task item`}
+                data-cy={`${status}-task-item-${id.toString()}`}
               >
                 <DropPlaceHolder
                   $dragging={snapshot.isDragging ? "true" : "false"}
@@ -152,6 +160,7 @@ function TaskItem({
                       status={status}
                       onCancel={onCancelDelete}
                       onConfirm={onConfirmDelete}
+                      id={id.toString()}
                     />
                   )}
 
@@ -161,6 +170,7 @@ function TaskItem({
                       name={`tasksItem${id}`}
                       status={status}
                       disabled={isEditing || showDeleteModal}
+                      id={id.toString()}
                     />
                   </div>
 
@@ -185,6 +195,7 @@ function TaskItem({
                   {isEditing && (
                     <EditActionsBlock $status={status}>
                       <button onClick={onCancelEdit}>Cancel</button>
+
                       <EditBtn onClick={onEdit} $status={status}>
                         Edit
                       </EditBtn>
@@ -193,9 +204,11 @@ function TaskItem({
 
                   {!isEditing && isHovering && (
                     <RemoveTask
+                      aria-label="delete add item"
                       data-testid="delete-icon"
                       onClick={onDeleteClick}
                       $status={status}
+                      data-cy={`${status}-delete-item-${id.toString()}`}
                     >
                       <span>🗙</span>
                     </RemoveTask>
