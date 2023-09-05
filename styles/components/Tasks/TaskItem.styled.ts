@@ -1,25 +1,17 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
 
-export const TaskItemWrapper = styled.div.attrs<{
-  $dragging: "true" | "false";
-}>((props) => ({
-  $dragging: props.$dragging,
-}))`
+export const TaskItemWrapper = styled.article`
   position: relative;
   background-color: transparent;
 `;
 
-export const StyledTaskItem = styled.div.attrs<{
-  $dragging?: "true" | "false";
+export const StyledTaskItem = styled.div<{
   $status: TaskStatus;
   $draggable: "true" | "false";
-}>((props) => ({
-  $dragging: props.$dragging,
-  $status: props.$status,
-  $draggable: props.$draggable,
-}))`
+  $dragging: "true" | "false";
+}>`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -36,13 +28,10 @@ export const StyledTaskItem = styled.div.attrs<{
   border: 1px solid ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;
 
-export const DropPlaceHolder = styled.div.attrs<{
+export const DropPlaceHolder = styled.div<{
   $status: TaskStatus;
-  $dragging?: "true" | "false";
-}>((props) => ({
-  $status: props.$status,
-  $dragging: props.$dragging,
-}))`
+  $dragging: "true" | "false";
+}>`
   border-radius: 4px;
   background-color: #fff;
   height: 30px;
@@ -59,11 +48,7 @@ export const DropPlaceHolder = styled.div.attrs<{
     ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;
 
-export const StyledTextArea = styled.textarea.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const StyledTextArea = styled.textarea<{ $status: TaskStatus }>`
   font-size: 0.75rem;
   line-height: 130%;
   color: #000;
@@ -94,11 +79,7 @@ export const StyledTextArea = styled.textarea.attrs<{
   }
 `;
 
-export const TaskItemText = styled.p.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const TaskItemText = styled.p<{ $status: TaskStatus }>`
   font-size: 0.75rem;
   line-height: 130%;
   cursor: text;
@@ -107,11 +88,7 @@ export const TaskItemText = styled.p.attrs<{
     $status === TaskStatus.DONE ? "line-through" : "none"};
 `;
 
-export const EditActionsBlock = styled.div.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const EditActionsBlock = styled.div<{ $status: TaskStatus }>`
   font-size: 12px;
   font-weight: 600;
 
@@ -132,19 +109,11 @@ export const EditActionsBlock = styled.div.attrs<{
   }
 `;
 
-export const EditBtn = styled.button.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const EditBtn = styled.button<{ $status: TaskStatus }>`
   color: ${({ $status, theme }) => theme.colors[$status].heading} !important;
 `;
 
-export const RemoveTask = styled.div.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const RemoveTask = styled.div<{ $status: TaskStatus }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,6 +126,10 @@ export const RemoveTask = styled.div.attrs<{
   font-weight: 500;
   width: 24px;
   height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  padding: 0.5rem;
+  padding-right: 0;
 
   color: ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;

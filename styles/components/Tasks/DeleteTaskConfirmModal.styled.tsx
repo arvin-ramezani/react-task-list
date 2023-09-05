@@ -1,12 +1,8 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
 
-export const StyledDeleteTask = styled.div.attrs<{
-  $status: TaskStatus;
-}>((props) => ({
-  $status: props.$status,
-}))`
+export const StyledDeleteTask = styled.div<{ $status: TaskStatus }>`
   position: absolute;
   left: 0;
   width: 100%;
@@ -29,6 +25,7 @@ export const StyledDeleteTask = styled.div.attrs<{
     font-size: inherit;
     font-weight: inherit;
     color: inherit;
+    padding: 0.5rem 1rem;
   }
 
   & button:first-child {

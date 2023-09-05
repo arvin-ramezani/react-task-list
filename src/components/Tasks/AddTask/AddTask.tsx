@@ -28,7 +28,11 @@ function AddTask({ status, absolutePosition }: AddTaskProps) {
         />
       )}
 
-      <NewTaskBtn onClick={setIsAdding.bind(null, true)} $status={status}>
+      <NewTaskBtn
+        onClick={setIsAdding.bind(null, true)}
+        $status={status}
+        aria-label="new task"
+      >
         <span>+</span>
         New
       </NewTaskBtn>

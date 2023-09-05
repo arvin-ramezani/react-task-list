@@ -63,57 +63,62 @@ function TaskItem({
   return (
     <>
       {addMode ? (
-        <TaskItemWrapper key={"addTaskItem"} $dragging={"false"}>
+        <TaskItemWrapper
+          key={"addTaskItem"}
+          onMouseEnter={startHovering}
+          onMouseLeave={endHovering}
+          data-cy={`${status}-add-task-${id}`}
+        >
           <DropPlaceHolder $dragging={"false"} $status={status} />
 
           <StyledTaskItem
             $status={status}
             $dragging={"false"}
             $draggable="false"
-            onMouseEnter={startHovering}
-            onMouseLeave={endHovering}
           >
             {showDeleteModal && (
               <DeleteTaskConfirmModal
                 status={status}
                 onCancel={onCancelDelete}
                 onConfirm={onConfirmDelete}
+                id={id.toString()}
               />
             )}
 
             <div>
               <CheckBox
                 onChange={onToggleDoneTask}
-                name={`tasksItem${id}`}
+                name={"addTask"}
                 status={status}
                 disabled={isEditing || showDeleteModal}
+                id={id.toString()}
               />
             </div>
 
-            {isEditing ? (
-              <StyledTextArea
-                ref={inputRef}
-                onChange={onEditInputChange}
-                name={`editTask${id}`}
-                $status={status}
-              />
-            ) : (
-              <TaskItemText onClick={onEditTaskClick} $status={status}>
-                {text}
-              </TaskItemText>
-            )}
+            <StyledTextArea
+              ref={inputRef}
+              // onChange={onEditInputChange}
+              name={`newTask`}
+              aria-label={"newTask"}
+              $status={status}
+            />
 
             {isEditing && (
               <EditActionsBlock $status={status}>
                 <button onClick={onCancelEdit}>Cancel</button>
-                <EditBtn onClick={addMode ? onAdd : onEdit} $status={status}>
-                  {addMode ? "Add" : "Edit"}
+
+                <EditBtn onClick={onAdd} $status={status}>
+                  Add
                 </EditBtn>
               </EditActionsBlock>
             )}
 
             {!isEditing && isHovering && (
-              <RemoveTask onClick={onDeleteClick} $status={status}>
+              <RemoveTask
+                aria-label="delete add item"
+                onClick={onDeleteClick}
+                $status={status}
+              >
                 <span>🗙</span>
               </RemoveTask>
             )}
@@ -135,7 +140,10 @@ function TaskItem({
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
-                $dragging={snapshot.isDragging ? "true" : "false"}
+                onMouseEnter={startHovering}
+                onMouseLeave={endHovering}
+                aria-label={`${status} task item`}
+                data-cy={`${status}-task-item-${id.toString()}`}
               >
                 <DropPlaceHolder
                   $dragging={snapshot.isDragging ? "true" : "false"}
@@ -146,14 +154,13 @@ function TaskItem({
                   $status={status}
                   $dragging={snapshot.isDragging ? "true" : "false"}
                   $draggable="true"
-                  onMouseEnter={startHovering}
-                  onMouseLeave={endHovering}
                 >
                   {showDeleteModal && (
                     <DeleteTaskConfirmModal
                       status={status}
                       onCancel={onCancelDelete}
                       onConfirm={onConfirmDelete}
+                      id={id.toString()}
                     />
                   )}
 
@@ -163,6 +170,7 @@ function TaskItem({
                       name={`tasksItem${id}`}
                       status={status}
                       disabled={isEditing || showDeleteModal}
+                      id={id.toString()}
                     />
                   </div>
 
@@ -172,9 +180,14 @@ function TaskItem({
                       onChange={onEditInputChange}
                       name={`editTask${id}`}
                       $status={status}
+                      aria-label="edit task"
                     />
                   ) : (
-                    <TaskItemText onClick={onEditTaskClick} $status={status}>
+                    <TaskItemText
+                      data-testid="task text"
+                      onClick={onEditTaskClick}
+                      $status={status}
+                    >
                       {text}
                     </TaskItemText>
                   )}
@@ -182,17 +195,21 @@ function TaskItem({
                   {isEditing && (
                     <EditActionsBlock $status={status}>
                       <button onClick={onCancelEdit}>Cancel</button>
-                      <EditBtn
-                        onClick={addMode ? onAdd : onEdit}
-                        $status={status}
-                      >
-                        {addMode ? "Add" : "Edit"}
+
+                      <EditBtn onClick={onEdit} $status={status}>
+                        Edit
                       </EditBtn>
                     </EditActionsBlock>
                   )}
 
                   {!isEditing && isHovering && (
-                    <RemoveTask onClick={onDeleteClick} $status={status}>
+                    <RemoveTask
+                      aria-label="delete add item"
+                      data-testid="delete-icon"
+                      onClick={onDeleteClick}
+                      $status={status}
+                      data-cy={`${status}-delete-item-${id.toString()}`}
+                    >
                       <span>🗙</span>
                     </RemoveTask>
                   )}

@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import styled from "styled-components";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
 

@@ -10,7 +10,6 @@ import React, {
 import { ITask, TaskStatus } from "../../utils/types/tasks.types";
 import { initialTasksState, tasksReducer } from "./tasksReducer";
 import {
-  IAddAllTasksActionPayload,
   IAddTaskActionPayload,
   IDeleteTaskActionPayload,
   IDoneTaskActionPayload,
@@ -28,30 +27,37 @@ import { getFromLocalStorage } from "../../utils/helpers/localStorage";
 const useTasksContext = (initialState: IInitialTasksState) => {
   const [state, dispatch] = useReducer(tasksReducer, initialState);
 
-  const addAllTasks = useCallback(
-    (tasksList: IAddAllTasksActionPayload["payload"]) => {
-      const localStorageState = getFromLocalStorage(
-        LocalStorageDataName.TASKS
-      ) as IInitialTasksState;
+  const addAllTasks = useCallback((tasksList: ITask[]) => {
+    const localStorageState = getFromLocalStorage(
+      LocalStorageDataName.TASKS
+    ) as IInitialTasksState;
 
-      if (localStorageState) {
-        dispatch({
-          type: TasksReducerActionTypes.SET_STATE,
-          payload: localStorageState,
-        });
+    if (localStorageState) {
+      dispatch({
+        type: TasksReducerActionTypes.SET_STATE,
+        payload: localStorageState,
+      });
 
-        return;
-      } else {
-        dispatch({
-          type: TasksReducerActionTypes.ADD_ALL_TASKS,
-          payload: tasksList,
-        });
+      return;
+    } else {
+      const todoList = tasksList.filter((t) => t.status === TaskStatus.TODO);
 
-        return;
-      }
-    },
-    []
-  );
+      const doingList = tasksList.filter((t) => t.status === TaskStatus.DOING);
+
+      const doneList = tasksList.filter((t) => t.status === TaskStatus.DONE);
+
+      dispatch({
+        type: TasksReducerActionTypes.ADD_ALL_TASKS,
+        payload: {
+          todoList,
+          doingList,
+          doneList,
+        },
+      });
+
+      return;
+    }
+  }, []);
 
   const doneTask = useCallback(
     (taskToDonePayload: IDoneTaskActionPayload["payload"]) => {
@@ -151,15 +157,15 @@ type UseTasksContextType = ReturnType<typeof useTasksContext>;
 
 const initialContextState: UseTasksContextType = {
   state: initialTasksState,
-  addAllTasks: (tasksList: ITask[]) => {},
-  doneTask: (payload: { id: number; currentStatus: TaskStatus }) => {},
-  undoneTask: (payload: { id: number }) => {},
-  editTask: (payload: { id: number; text: string }) => {},
-  deleteTask: (payload: { id: number }) => {},
-  addTask: (payload: { text: string; status: TaskStatus }) => {},
-  dragDropHandler: (payload: IDragDropActionPayload["payload"]) => {},
-  setIsDragging: (payload: ISetIsDraggingActionPayload["payload"]) => {},
-  clearWaitList: (payload: ReducerActionType[]) => {},
+  addAllTasks: (_: ITask[]) => {},
+  doneTask: (_: IDoneTaskActionPayload["payload"]) => {},
+  undoneTask: (_: IUndoneTaskActionPayload["payload"]) => {},
+  editTask: (_: IEditTaskActionPayload["payload"]) => {},
+  deleteTask: (_: IDeleteTaskActionPayload["payload"]) => {},
+  addTask: (_: IAddTaskActionPayload["payload"]) => {},
+  dragDropHandler: (_: IDragDropActionPayload["payload"]) => {},
+  setIsDragging: (_: ISetIsDraggingActionPayload["payload"]) => {},
+  clearWaitList: (_: ReducerActionType[]) => {},
 };
 
 export const TasksContext =
@@ -186,7 +192,7 @@ type useTasksType = {
   doneList: IInitialTasksState["doneList"];
   isDragging: IInitialTasksState["isDragging"];
   waitList: IInitialTasksState["waitList"];
-  addAllTasks: (taskList: IAddAllTasksActionPayload["payload"]) => void;
+  addAllTasks: (taskList: ITask[]) => void;
   doneTask: (payload: IDoneTaskActionPayload["payload"]) => void;
   undoneTask: (payload: IUndoneTaskActionPayload["payload"]) => void;
   editTask: (payload: IEditTaskActionPayload["payload"]) => void;

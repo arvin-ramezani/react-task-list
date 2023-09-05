@@ -12,9 +12,10 @@ interface CheckBoxProps {
   status: TaskStatus;
   onChange: () => void;
   disabled?: boolean;
+  id?: string;
 }
 
-const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
+const CheckBox = ({ name, status, onChange, disabled, id }: CheckBoxProps) => {
   const [checked, setChecked] = useState(status === TaskStatus.DONE);
 
   const onChangeHandler = () => {
@@ -29,7 +30,12 @@ const CheckBox = ({ name, status, onChange, disabled }: CheckBoxProps) => {
   }, [disabled]);
 
   return (
-    <StyledLabel htmlFor={name} onClick={onChangeHandler} disabled={disabled}>
+    <StyledLabel
+      htmlFor={name}
+      onClick={onChangeHandler}
+      disabled={disabled}
+      data-cy={`${status}-checkbox-${id}`}
+    >
       <StyledCheckBox
         checked={checked}
         onChange={onChangeHandler}

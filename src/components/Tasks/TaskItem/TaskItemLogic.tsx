@@ -7,6 +7,8 @@ import React, {
 
 import { useTasks } from "../../../context/TasksContext";
 import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
+import { validateTaskText } from "../../../../utils/helpers/validate";
+import { splitTaskTextToMultiLine } from "../../../../utils/helpers/splitMultilineTaskText";
 
 interface ITaskItemLogic {
   addMode?: boolean;
@@ -23,7 +25,8 @@ function TaskItemLogic({
   text,
   onExitAddMode,
 }: ITaskItemLogic) {
-  const { doneTask, undoneTask, editTask, deleteTask, addTask } = useTasks();
+  const { doneTask, undoneTask, editTask, deleteTask, addTask, isDragging } =
+    useTasks();
   const [isHovering, setIsHovering] = useState(false);
   const [isEditing, setIsEditing] = useState(addMode || false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -52,9 +55,17 @@ function TaskItemLogic({
   const onAdd = () => {
     const text = inputRef.current?.value;
 
-    if (!text || text?.trim() === "") return;
+    const textIsValid = validateTaskText(text);
+    if (!textIsValid) return onExitAddMode && onExitAddMode();
 
-    addTask({ status, text });
+    const splittedText = splitTaskTextToMultiLine(text!);
+
+    splittedText.forEach((text) => {
+      if (validateTaskText(text)) {
+        addTask({ status, text });
+      }
+    });
+
     onExitAddMode && onExitAddMode();
   };
 
@@ -79,7 +90,7 @@ function TaskItemLogic({
   const onEditInputChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     if (!inputRef.current) return;
 
-    inputRef.current.value = e.target.value;
+    // inputRef.current.value = e.target.value;
   };
 
   const onEditTaskClick: MouseEventHandler<HTMLParagraphElement> = (e) => {
@@ -92,11 +103,11 @@ function TaskItemLogic({
   };
 
   const startHovering = () => {
-    setIsHovering(true);
+    return setIsHovering(() => true);
   };
 
   const endHovering = () => {
-    setIsHovering(false);
+    return setIsHovering(() => false);
   };
 
   const onToggleDoneTask = () => {

@@ -25,6 +25,8 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
           {...provided.droppableProps}
           ref={provided.innerRef}
           $status={status}
+          aria-label={`${status} tasks list`}
+          data-cy={`${status}-list`}
         >
           <TasksListHeader>
             <TasksListTitle $status={status}>{title}</TasksListTitle>

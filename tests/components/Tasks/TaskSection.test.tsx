@@ -1,7 +1,11 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+<<<<<<< HEAD
 import { renderTaskSectionWithProviders } from "../../testUtils/renderUtils";
+=======
+import { renderTaskSectionWithProviders } from "../../helpers/renderUtils";
+>>>>>>> main
 import { TaskStatus } from "../../../utils/types/tasks.types";
 import { TASKS_LIST } from "../../../utils/dummy-data";
 
