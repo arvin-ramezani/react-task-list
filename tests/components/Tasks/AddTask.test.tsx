@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-<<<<<<< HEAD
 import { renderAddTaskWithProviders } from "../../testUtils/renderUtils";
-=======
-import { renderAddTaskWithProviders } from "../../helpers/renderUtils";
->>>>>>> main
 
 describe("<AddTask />", () => {
   it("Should show a button to add a task", () => {

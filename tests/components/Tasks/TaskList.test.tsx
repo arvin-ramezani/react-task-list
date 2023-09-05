@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-<<<<<<< HEAD
 import { renderTaskListWithProviders } from "../../testUtils/renderUtils";
-=======
-import { renderTaskListWithProviders } from "../../helpers/renderUtils";
->>>>>>> main
 import { TaskStatus } from "../../../utils/types/tasks.types";
 import { TASKS_LIST } from "../../../utils/dummy-data";
 
