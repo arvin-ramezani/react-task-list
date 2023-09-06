@@ -6,7 +6,7 @@ import {
   getDragDropState,
   getEditTaskState,
   getUndoneTaskState,
-} from "../../utils/helpers/taskReducerHandlers";
+} from "../../utils/helpers/taskReducerHelpers";
 import { LocalStorageDataName } from "../../utils/types/common.types";
 import {
   IInitialTasksState,

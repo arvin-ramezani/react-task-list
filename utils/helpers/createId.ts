@@ -3,9 +3,15 @@ import { IInitialTasksState } from "../types/tasksReducer.types";
 import { getFromLocalStorage } from "./localStorage";
 
 export const createId = () => {
-  const { doingList, todoList, doneList } = getFromLocalStorage(
+  const storedState = getFromLocalStorage(
     LocalStorageDataName.TASKS
   ) as IInitialTasksState;
+
+  if (!storedState) {
+    return getId();
+  }
+
+  const { doingList, todoList, doneList } = storedState;
 
   const currentIdList = [...doingList, ...todoList, ...doneList].map(
     (t) => t.id
@@ -16,10 +22,10 @@ export const createId = () => {
   return newId;
 };
 
-const getId = (currentIdList: number[]): number => {
+const getId = (currentIdList?: number[]): number => {
   const id = Math.floor(Math.random() * 10000000000000);
 
-  if (!currentIdList.includes(id)) return id;
+  if (!currentIdList || !currentIdList?.includes(id)) return id;
 
   return getId(currentIdList);
 };
