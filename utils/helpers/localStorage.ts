@@ -1,5 +1,5 @@
 export const saveToLocalStorage = (dataName: string, data: unknown) => {
-  localStorage.setItem(dataName, JSON.stringify(data));
+  return localStorage.setItem(dataName, JSON.stringify(data));
 };
 
 export const getFromLocalStorage = (dataName: string) => {
