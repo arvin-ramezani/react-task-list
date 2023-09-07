@@ -12,7 +12,7 @@ import { ITask, TaskStatus } from "../../utils/types/tasks.types";
 import { initialTasksState } from "../../src/context/tasksReducer";
 import AddTask from "../../src/components/Tasks/AddTask/AddTask";
 import TasksList from "../../src/components/Tasks/TaskList/TasksList";
-import TasksSection from "../../src/components/Tasks/TaskSection/TasksSection";
+import TasksSection from "../../src/components/Tasks/TaskSection/TaskSection";
 
 export const renderTaskItemWithProviders = (
   taskProp: ITask = TASKS_LIST[0]

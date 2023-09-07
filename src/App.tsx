@@ -1,7 +1,7 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
 
-import TasksSection from "./components/Tasks/TaskSection/TasksSection";
+import TaskSection from "./components/Tasks/TaskSection/TaskSection";
 import GlobalStyle from "../styles/globalStyles";
 import theme from "../styles/theme";
 import { TasksContextProvider } from "./context/TasksContext";
@@ -12,7 +12,7 @@ function App() {
     <TasksContextProvider {...initialTasksState}>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <TasksSection />
+        <TaskSection />
       </ThemeProvider>
     </TasksContextProvider>
   );

@@ -11,48 +11,11 @@ import { SectionContainer } from "../../../../styles/components/common/SectionCo
 import { TaskStatus } from "../../../../utils/types/tasks.types";
 import { TASKS_LIST } from "../../../../utils/dummy-data";
 import { useTasks } from "../../../context/TasksContext";
+import TasksSectionLogic from "./TaskSectionLogic";
 
-function TasksSection() {
-  const {
-    addAllTasks,
-    todoList,
-    doingList,
-    doneList,
-    dragDropHandler,
-    setIsDragging,
-  } = useTasks();
-
-  const onDragStart = () => setIsDragging({ isDragging: true });
-
-  const onDragEnd: OnDragEndResponder = (result) => {
-    const { source, destination } = result;
-
-    if (!destination) return setIsDragging({ isDragging: false });
-
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    )
-      return setIsDragging({ isDragging: false });
-
-    const sourceStatus = source.droppableId as TaskStatus;
-    const destinationStatus = destination.droppableId as TaskStatus;
-    const sourceIndex = source.index;
-    const destinationIndex = destination.index;
-
-    dragDropHandler({
-      sourceStatus,
-      destinationStatus,
-      sourceIndex,
-      destinationIndex,
-    });
-
-    setIsDragging({ isDragging: false });
-  };
-
-  useEffect(() => {
-    addAllTasks(TASKS_LIST);
-  }, []);
+function TaskSection() {
+  const { dragEndHandler, dragStartHandler, todoList, doingList, doneList } =
+    TasksSectionLogic();
 
   return (
     <StyledTasksSection>
@@ -60,7 +23,10 @@ function TasksSection() {
         <TaskListHeader />
 
         <TasksContainer>
-          <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+          <DragDropContext
+            onDragStart={dragStartHandler}
+            onDragEnd={dragEndHandler}
+          >
             <TasksList
               key="tasksListTodo"
               title="Todo"
@@ -88,4 +54,4 @@ function TasksSection() {
   );
 }
 
-export default TasksSection;
+export default TaskSection;
