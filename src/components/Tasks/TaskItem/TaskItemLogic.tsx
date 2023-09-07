@@ -35,15 +35,15 @@ function TaskItemLogic({
 
   const delayRef = useRef<number>(null);
 
-  const onConfirmDelete = () => {
+  const confirmDeleteHandler = () => {
     deleteTask({ id });
   };
 
-  const onCancelDelete = () => {
+  const cancelDeleteHandler = () => {
     setShowDeleteModal(false);
   };
 
-  const onDeleteClick = () => {
+  const deleteClickHandler = () => {
     setShowDeleteModal(true);
 
     if (delayRef.current && isDone) {
@@ -52,7 +52,7 @@ function TaskItemLogic({
     }
   };
 
-  const onAdd = () => {
+  const addTaskHandler = () => {
     const text = inputRef.current?.value;
 
     const textIsValid = validateTaskText(text);
@@ -82,12 +82,14 @@ function TaskItemLogic({
     return setIsEditing(false);
   };
 
-  const onCancelEdit = () => {
+  const cancelEditHandler = () => {
     setIsEditing(false);
     onExitAddMode && onExitAddMode();
   };
 
-  const onEditInputChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+  const editInputChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (
+    e
+  ) => {
     if (!inputRef.current) return;
 
     // inputRef.current.value = e.target.value;
@@ -102,15 +104,15 @@ function TaskItemLogic({
     }
   };
 
-  const startHovering = () => {
+  const startHoverHandler = () => {
     return setIsHovering(() => true);
   };
 
-  const endHovering = () => {
+  const endHoverHandler = () => {
     return setIsHovering(() => false);
   };
 
-  const onToggleDoneTask = () => {
+  const toggleDoneTaskHandler = () => {
     setIsDone((prev) => !prev);
 
     clearSetTimeout();
@@ -134,17 +136,17 @@ function TaskItemLogic({
     showDeleteModal,
     inputRef,
     delayRef,
-    onConfirmDelete,
-    onCancelDelete,
-    onDeleteClick,
-    onAdd,
+    confirmDeleteHandler,
+    cancelDeleteHandler,
+    deleteClickHandler,
+    addTaskHandler,
     onEdit,
-    onCancelEdit,
-    onEditInputChange,
+    cancelEditHandler,
+    editInputChangeHandler,
     onEditTaskClick,
-    startHovering,
-    endHovering,
-    onToggleDoneTask,
+    startHoverHandler,
+    endHoverHandler,
+    toggleDoneTaskHandler,
     clearSetTimeout,
   };
 }
