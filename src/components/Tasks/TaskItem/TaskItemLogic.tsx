@@ -1,9 +1,4 @@
-import React, {
-  ChangeEventHandler,
-  MouseEventHandler,
-  useRef,
-  useState,
-} from "react";
+import React, { MouseEventHandler, useRef, useState } from "react";
 
 import { useTasks } from "../../../context/TasksContext";
 import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
@@ -69,7 +64,7 @@ function TaskItemLogic({
     onExitAddMode && onExitAddMode();
   };
 
-  const onEdit = () => {
+  const editTaskHandler = () => {
     if (
       !inputRef.current ||
       inputRef.current.value.trim() === "" ||
@@ -87,15 +82,7 @@ function TaskItemLogic({
     onExitAddMode && onExitAddMode();
   };
 
-  const editInputChangeHandler: ChangeEventHandler<HTMLTextAreaElement> = (
-    e
-  ) => {
-    if (!inputRef.current) return;
-
-    // inputRef.current.value = e.target.value;
-  };
-
-  const onEditTaskClick: MouseEventHandler<HTMLParagraphElement> = (e) => {
+  const editTaskClickHandler: MouseEventHandler<HTMLParagraphElement> = (e) => {
     setIsEditing(true);
 
     if (delayRef.current) {
@@ -115,7 +102,7 @@ function TaskItemLogic({
   const toggleDoneTaskHandler = () => {
     setIsDone((prev) => !prev);
 
-    clearSetTimeout();
+    clearSetTimeoutHandler();
 
     // @ts-ignore
     delayRef.current = setTimeout(() => {
@@ -127,7 +114,7 @@ function TaskItemLogic({
     }, 3000);
   };
 
-  const clearSetTimeout = () => {
+  const clearSetTimeoutHandler = () => {
     delayRef.current && clearTimeout(delayRef.current);
   };
   return {
@@ -140,14 +127,13 @@ function TaskItemLogic({
     cancelDeleteHandler,
     deleteClickHandler,
     addTaskHandler,
-    onEdit,
+    editTaskHandler,
     cancelEditHandler,
-    editInputChangeHandler,
-    onEditTaskClick,
+    editTaskClickHandler,
     startHoverHandler,
     endHoverHandler,
     toggleDoneTaskHandler,
-    clearSetTimeout,
+    clearSetTimeoutHandler,
   };
 }
 
