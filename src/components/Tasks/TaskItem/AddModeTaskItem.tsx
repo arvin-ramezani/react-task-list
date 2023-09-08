@@ -50,16 +50,6 @@ const AddModeTaskItem: FC<AddModeTaskItemProps> = ({
           />
         )}
 
-        <div>
-          <CheckBox
-            onChange={onToggleDoneTask}
-            name={"addTask"}
-            status={status}
-            disabled={showDeleteModal}
-            id={id.toString()}
-          />
-        </div>
-
         <StyledTextArea
           ref={inputRef}
           name={`newTask`}
