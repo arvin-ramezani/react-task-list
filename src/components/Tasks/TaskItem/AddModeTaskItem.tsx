@@ -9,7 +9,6 @@ import {
   TaskItemWrapper,
 } from "../../../../styles/components/Tasks/TaskItem.styled";
 import DeleteTaskConfirmModal from "../DeleteTaskConfirmModal/DeleteTaskConfirmModal";
-import CheckBox from "../../ui/CheckBox";
 import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
 
 export interface AddModeTaskItemProps {
