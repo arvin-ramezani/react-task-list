@@ -152,18 +152,23 @@ export const RemoveTask = styled(motion.div)<{ $status: TaskStatus }>`
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 0px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 12px;
+  /* font-size: 12px; */
   font-weight: 500;
-  width: 24px;
-  height: 24px;
+  /* width: 24px;
+  height: 24px; */
   border-radius: 50%;
   background: transparent;
   padding: 0.5rem;
   padding-right: 0;
 
   color: ${({ theme, $status }) => theme.colors[$status].borderColor};
+
+  & > svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
