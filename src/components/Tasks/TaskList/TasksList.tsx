@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { Variants, motion } from "framer-motion";
 import { StrictModeDroppable as Droppable } from "../../DragDrop/strictModeDroppable";
 
 import { TaskStatus, ITask } from "../../../../utils/types/tasks.types";
@@ -16,6 +16,15 @@ import {
   tasksLengthWrapperVariants,
 } from "./TasksList.variants";
 
+export const taskListVariants: Variants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1 },
+  },
+};
+
 interface TasksListProps {
   tasksList: ITask[];
   title: string;
@@ -27,6 +36,7 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
     <Droppable key={status} droppableId={status}>
       {(provided, snapshot) => (
         <StyledTasksList
+          variants={taskListVariants}
           {...provided.droppableProps}
           ref={provided.innerRef}
           $status={status}

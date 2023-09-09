@@ -1,27 +1,27 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
-export const StyledTasksSection = styled.main`
-  padding: 2rem 0;
+export const StyledTasksListHeader = styled(motion.header)`
+  width: 80%;
+  margin: 70px auto 0;
 `;
 
-export const StyledTasksListHeader = styled.div``;
-
-export const TasksListHeading = styled.h1`
+export const TasksListHeading = styled(motion.h1)`
   font-size: 2rem;
   font-weight: bold;
   margin: 1rem 0;
 `;
 
-export const TasksListSubHeading = styled.p`
+export const TasksListSubHeading = styled(motion.p)`
   font-size: 1rem;
   margin: 1rem 0;
 `;
 
-export const TasksListParagraph = styled.p`
+export const TasksListParagraph = styled(motion.p)`
   font-size: 1rem;
 `;
 
-export const TasksContainer = styled.div`
+export const TasksContainer = styled(motion.div)`
   margin-top: 2rem;
   display: grid;
   row-gap: 6rem;

@@ -6,15 +6,37 @@ import {
   TasksListParagraph,
 } from "../../../../styles/components/Tasks/TasksSections.styled";
 import { StyledTasksListHeader } from "../../../../styles/components/Tasks/TasksSections.styled";
+import { Variants } from "framer-motion";
+import {
+  headerItemsVariants,
+  headerVariants,
+} from "./TaskSectionHeader.variants";
 
 function TaskListHeader() {
   return (
-    <StyledTasksListHeader>
-      <TasksListHeading>✔️Task List</TasksListHeading>
-      <TasksListSubHeading>
+    <StyledTasksListHeader
+      variants={headerVariants}
+      initial={"initial"}
+      animate={"animate"}
+      transition={{ duration: 0.6, staggerChildren: 0.2 }}
+    >
+      <TasksListHeading
+        variants={headerItemsVariants}
+        transition={{ duration: 0.6 }}
+      >
+        ✔️Task List
+      </TasksListHeading>
+
+      <TasksListSubHeading
+        variants={headerItemsVariants}
+        transition={{ duration: 0.6 }}
+      >
         Break your life to simple tasks to get things done!
       </TasksListSubHeading>
-      <TasksListParagraph>
+      <TasksListParagraph
+        variants={headerItemsVariants}
+        transition={{ duration: 0.8 }}
+      >
         Does not matter how many tasks you done, It’s important to break to
         small tasks and be on progress.
       </TasksListParagraph>

@@ -1,26 +1,36 @@
 import React from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { Variants } from "framer-motion";
 
 import TasksList from "../TaskList/TasksList";
-import {
-  StyledTasksSection,
-  TasksContainer,
-} from "../../../../styles/components/Tasks/TasksSections.styled";
+import { TasksContainer } from "../../../../styles/components/Tasks/TasksSections.styled";
 import TaskListHeader from "../TaskSectionHeader/TaskSectionHeader";
 import { SectionContainer } from "../../../../styles/components/common/SectionContainer";
 import { TaskStatus } from "../../../../utils/types/tasks.types";
 import TasksSectionLogic from "./TaskSectionLogic";
+
+export const taskListContainerVariants: Variants = {
+  initial: { opacity: 0 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1 },
+  },
+};
 
 function TaskSection() {
   const { dragEndHandler, dragStartHandler, todoList, doingList, doneList } =
     TasksSectionLogic();
 
   return (
-    <StyledTasksSection>
+    <>
+      <TaskListHeader />
       <SectionContainer>
-        <TaskListHeader />
-
-        <TasksContainer>
+        <TasksContainer
+          variants={taskListContainerVariants}
+          initial={"initial"}
+          animate={"animate"}
+        >
           <DragDropContext
             onDragStart={dragStartHandler}
             onDragEnd={dragEndHandler}
@@ -48,7 +58,7 @@ function TaskSection() {
           </DragDropContext>
         </TasksContainer>
       </SectionContainer>
-    </StyledTasksSection>
+    </>
   );
 }
 

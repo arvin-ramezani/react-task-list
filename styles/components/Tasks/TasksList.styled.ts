@@ -3,11 +3,12 @@ import { motion } from "framer-motion";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
 
-export const StyledTasksList = styled.section<{ $status: TaskStatus }>`
+export const StyledTasksList = styled(motion.section)<{ $status: TaskStatus }>`
   padding: 20px 20px 40px 20px;
   border-radius: 10px;
   margin: 2rem 0;
   position: relative;
+  min-height: 80px;
   height: 100%;
 
   background-color: ${({ $status, theme }) => theme.colors[$status].background};
