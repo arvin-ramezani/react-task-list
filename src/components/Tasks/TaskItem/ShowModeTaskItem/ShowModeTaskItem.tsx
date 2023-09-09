@@ -6,6 +6,7 @@ import React, {
 } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { AnimatePresence, motion } from "framer-motion";
+import { MdClose } from "react-icons/md";
 
 import {
   DropPlaceHolder,
@@ -198,7 +199,7 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
                     $status={status}
                     data-cy={`${status}-delete-item-${id.toString()}`}
                   >
-                    <span>&#128473;</span>
+                    {/* <span>&#128473;</span> */}
                     {/* <span>🗙</span> */}
                   </RemoveTask>
                 )}
