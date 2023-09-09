@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 
 import { TaskStatus } from "../../../../utils/types/tasks.types";
 import { StyledDeleteTask } from "../../../../styles/components/Tasks/DeleteTaskConfirmModal.styled";
-import { deleteTaskConfirmModalVariants } from "./DeleteTaskConfirmModal.variants";
+import {
+  deleteTaskBtnVariants,
+  deleteTaskConfirmModalVariants,
+} from "./DeleteTaskConfirmModal.variants";
 
 interface DeleteTaskConfirmModalProps {
   status: TaskStatus;
@@ -27,16 +30,29 @@ const DeleteTaskConfirmModal: FC<DeleteTaskConfirmModalProps> = ({
       exit={"exit"}
       $status={status}
     >
-      <button onClick={onCancel} data-cy={`${status}-cancel-delete-item-${id}`}>
+      <motion.button
+        variants={deleteTaskBtnVariants}
+        initial={"initial"}
+        animate={"animate"}
+        whileHover={"hover"}
+        whileTap={"tap"}
+        onClick={onCancel}
+        data-cy={`${status}-cancel-delete-item-${id}`}
+      >
         Cancel
-      </button>
+      </motion.button>
 
-      <button
+      <motion.button
+        variants={deleteTaskBtnVariants}
+        initial={"initial"}
+        animate={"animate"}
+        whileHover={"hover"}
+        whileTap={"tap"}
         onClick={onConfirm}
         data-cy={`${status}-confirm-delete-item-${id}`}
       >
         Delete
-      </button>
+      </motion.button>
     </StyledDeleteTask>
   );
 };
