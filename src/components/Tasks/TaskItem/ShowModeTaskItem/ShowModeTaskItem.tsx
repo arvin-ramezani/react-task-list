@@ -198,7 +198,8 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
                     $status={status}
                     data-cy={`${status}-delete-item-${id.toString()}`}
                   >
-                    <span>🗙</span>
+                    <span>&#128473;</span>
+                    {/* <span>🗙</span> */}
                   </RemoveTask>
                 )}
               </AnimatePresence>
