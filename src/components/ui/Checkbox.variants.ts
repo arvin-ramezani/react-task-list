@@ -10,9 +10,9 @@ export const checkboxVariants: Variants = {
 export const checkboxMarkVariants: Variants = {
   hidden: { scale: 0, x: "-50%", y: "-50%" },
   show: {
-    scale: 1.4,
-    x: "-50%",
-    y: "-50%",
+    scale: 1,
+    x: "-60%",
+    y: "-70%",
     rotate: "45deg",
   },
 };
