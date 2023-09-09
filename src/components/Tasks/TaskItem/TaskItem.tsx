@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import { useAnimation } from "framer-motion";
 
 import { ITask } from "../../../../utils/types/tasks.types";
 import TaskItemLogic from "./TaskItemLogic";
-import AddModeTaskItem from "./AddModeTaskItem";
-import ShowModeTaskItem from "./ShowModeTaskItem";
+import AddModeTaskItem from "./AddModeTaskItem/AddModeTaskItem";
+import ShowModeTaskItem from "./ShowModeTaskItem/ShowModeTaskItem";
 
 interface TaskItemProps extends ITask {
   index?: number;
@@ -22,6 +23,8 @@ function TaskItem({
   onExitAddMode,
   index,
 }: TaskItemPropsTypes) {
+  const invalidInputAnimation = useAnimation();
+
   const {
     isHovering,
     isEditing,
@@ -39,7 +42,14 @@ function TaskItem({
     endHoverHandler,
     toggleDoneTaskHandler,
     clearSetTimeoutHandler,
-  } = TaskItemLogic({ id, text, status, addMode, onExitAddMode });
+  } = TaskItemLogic({
+    id,
+    text,
+    status,
+    addMode,
+    onExitAddMode,
+    onInvalidInputAnimation: invalidInputAnimation,
+  });
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -52,11 +62,11 @@ function TaskItem({
     <>
       {addMode ? (
         <AddModeTaskItem
+          key="addTaskItem"
           status={status}
-          onDeleteClick={deleteClickHandler}
           onCancelDelete={cancelDeleteHandler}
           onConfirmDelete={confirmDeleteHandler}
-          onToggleDoneTask={toggleDoneTaskHandler}
+          onInvalidInputAnimation={invalidInputAnimation}
           showDeleteModal={showDeleteModal}
           inputRef={inputRef}
           onAddTask={addTaskHandler}
@@ -65,6 +75,7 @@ function TaskItem({
         />
       ) : (
         <ShowModeTaskItem
+          key="showTaskItem"
           onStartHover={startHoverHandler}
           onEndHover={endHoverHandler}
           isHovering={isHovering}

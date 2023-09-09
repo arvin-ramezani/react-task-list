@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
 
@@ -7,6 +8,7 @@ export const StyledTasksList = styled.section<{ $status: TaskStatus }>`
   border-radius: 10px;
   margin: 2rem 0;
   position: relative;
+  height: 100%;
 
   background-color: ${({ $status, theme }) => theme.colors[$status].background};
 `;
@@ -25,8 +27,15 @@ export const TasksListTitle = styled.h4<{ $status: TaskStatus }>`
   color: ${({ $status, theme }) => theme.colors[$status].heading};
 `;
 
-export const TasksLength = styled.span<{ $status: TaskStatus }>`
+export const TasksLength = styled(motion.span)<{ $status: TaskStatus }>`
   font-size: 0.75rem;
 
   color: ${({ theme, $status }) => theme.colors[$status].disabledText};
+
+  & > span {
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-right: 0.2rem;
+  }
 `;

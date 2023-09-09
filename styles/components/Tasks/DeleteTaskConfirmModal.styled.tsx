@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
+import { motion } from "framer-motion";
 
-export const StyledDeleteTask = styled.div<{ $status: TaskStatus }>`
+export const StyledDeleteTask = styled(motion.div)<{ $status: TaskStatus }>`
   position: absolute;
   left: 0;
   width: 100%;
@@ -14,7 +15,9 @@ export const StyledDeleteTask = styled.div<{ $status: TaskStatus }>`
   z-index: 1;
   font-size: 0.75rem;
   font-weight: 600;
-  background-color: #fff;
+  /* background-color: #fff; */
+
+  background-color: ${({ theme, $status }) => theme.colors[$status].background};
 
   color: ${({ theme, $status }) => theme.colors[$status].cta};
 

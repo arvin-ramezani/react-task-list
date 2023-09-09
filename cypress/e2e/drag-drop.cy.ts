@@ -14,7 +14,8 @@ describe("user can Drag and Drop a task item", () => {
 
     cy.get("[data-cy='todo-task-item-1']").drag('[data-cy="done-list"]');
 
-    cy.get("@doneList").find("article").should("have.length", 3);
+    // .findAllByLabelText(/task item/i)
+    cy.get('[data-cy="done-list"]').find("article").should("have.length", 3);
     cy.get("[data-cy='done-task-item-1']").should("exist");
 
     cy.contains("p", taskToDrag.text)

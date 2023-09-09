@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { TASKS_LIST } from "../../../../utils/dummy-data";
 import { useTasks } from "../../../context/TasksContext";
 import { OnDragEndResponder } from "react-beautiful-dnd";

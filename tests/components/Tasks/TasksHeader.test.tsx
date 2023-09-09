@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 
-import TasksHeader from "../../../src/components/Tasks/TaskListHeader/TaskListHeader";
+import TasksHeader from "../../../src/components/Tasks/TaskSectionHeader/TaskSectionHeader";
 
 describe("<TasksHeader />", () => {
   it("Should show correct heading and subHeadings", () => {

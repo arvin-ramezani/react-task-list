@@ -1,6 +1,12 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
+
+export const StyledMotionTaskItem = styled(motion.article)`
+  position: relative;
+  background-color: transparent;
+`;
 
 export const TaskItemWrapper = styled.article`
   position: relative;
@@ -48,14 +54,20 @@ export const DropPlaceHolder = styled.div<{
     ${({ theme, $status }) => theme.colors[$status].borderColor};
 `;
 
-export const StyledTextArea = styled.textarea<{ $status: TaskStatus }>`
+export const StyledTextArea = styled(motion.textarea)<{ $status: TaskStatus }>`
   font-size: 0.75rem;
   line-height: 130%;
   color: #000;
-  width: 70%;
   resize: none;
   border-radius: 3px;
   padding: 0.2rem 0.3rem;
+  position: absolute;
+  height: 80%;
+  width: 75%;
+  margin: 0 -0.6rem;
+  border-left: none;
+  border-right: none;
+  padding-bottom: 0.2rem;
 
   border-color: ${({ theme, $status }) => theme.colors[$status].borderColor};
 
@@ -64,7 +76,7 @@ export const StyledTextArea = styled.textarea<{ $status: TaskStatus }>`
   }
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 2px;
   }
 
   /* &::-webkit-scrollbar-track {
@@ -79,10 +91,10 @@ export const StyledTextArea = styled.textarea<{ $status: TaskStatus }>`
   }
 `;
 
-export const TaskItemText = styled.p<{ $status: TaskStatus }>`
+export const TaskItemText = styled(motion.p)<{ $status: TaskStatus }>`
   font-size: 0.75rem;
   line-height: 130%;
-  cursor: text;
+  cursor: pointer;
 
   text-decoration: ${({ $status }) =>
     $status === TaskStatus.DONE ? "line-through" : "none"};
@@ -91,6 +103,7 @@ export const TaskItemText = styled.p<{ $status: TaskStatus }>`
 export const EditActionsBlock = styled.div<{ $status: TaskStatus }>`
   font-size: 12px;
   font-weight: 600;
+  margin-left: auto;
 
   color: ${({ theme, $status }) => theme.colors[$status].disabledText};
 
@@ -109,11 +122,11 @@ export const EditActionsBlock = styled.div<{ $status: TaskStatus }>`
   }
 `;
 
-export const EditBtn = styled.button<{ $status: TaskStatus }>`
+export const EditBtn = styled(motion.button)<{ $status: TaskStatus }>`
   color: ${({ $status, theme }) => theme.colors[$status].heading} !important;
 `;
 
-export const RemoveTask = styled.div<{ $status: TaskStatus }>`
+export const RemoveTask = styled(motion.div)<{ $status: TaskStatus }>`
   display: flex;
   align-items: center;
   justify-content: center;

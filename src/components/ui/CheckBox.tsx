@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import {
   CustomCheckBox,
+  MarkIcon,
   StyledCheckBox,
   StyledLabel,
 } from "../../../styles/components/ui/CheckBox.styled";
 import { TaskStatus } from "../../../utils/types/tasks.types";
+import { checkboxMarkVariants, checkboxVariants } from "./Checkbox.variants";
 
 interface CheckBoxProps {
   name: string;
@@ -44,7 +47,30 @@ const CheckBox = ({ name, status, onChange, disabled, id }: CheckBoxProps) => {
         name={name}
       />
 
-      <CustomCheckBox checked={disabled ? false : checked} $status={status} />
+      <CustomCheckBox
+        as={motion.span}
+        variants={checkboxVariants}
+        initial={"initial"}
+        animate={"animate"}
+        whileHover={"hover"}
+        whileTap={"tap"}
+        checked={disabled ? false : checked}
+        $status={status}
+      />
+      <AnimatePresence>
+        {checked && (
+          <MarkIcon
+            as={motion.span}
+            variants={checkboxMarkVariants}
+            initial={"hidden"}
+            animate={"show"}
+            exit={"hidden"}
+            transition={{ type: "spring", bounce: 0.8 }}
+            $status={status}
+            checked={checked}
+          />
+        )}
+      </AnimatePresence>
     </StyledLabel>
   );
 };

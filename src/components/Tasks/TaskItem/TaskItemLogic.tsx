@@ -1,4 +1,6 @@
-import React, { MouseEventHandler, useRef, useState } from "react";
+import { MouseEventHandler, useRef, useState } from "react";
+import { AnimationControls } from "framer-motion";
+import { useAnimate } from "framer-motion";
 
 import { useTasks } from "../../../context/TasksContext";
 import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
@@ -11,6 +13,7 @@ interface ITaskItemLogic {
   id: ITask["id"];
   text: ITask["text"];
   onExitAddMode?: () => void;
+  onInvalidInputAnimation: AnimationControls;
 }
 
 function TaskItemLogic({
@@ -19,6 +22,7 @@ function TaskItemLogic({
   status,
   text,
   onExitAddMode,
+  onInvalidInputAnimation,
 }: ITaskItemLogic) {
   const { doneTask, undoneTask, editTask, deleteTask, addTask, isDragging } =
     useTasks();
@@ -27,6 +31,7 @@ function TaskItemLogic({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDone, setIsDone] = useState(status === TaskStatus.DONE);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [scope, animate] = useAnimate();
 
   const delayRef = useRef<number>(null);
 
@@ -51,7 +56,15 @@ function TaskItemLogic({
     const text = inputRef.current?.value;
 
     const textIsValid = validateTaskText(text);
-    if (!textIsValid) return onExitAddMode && onExitAddMode();
+
+    if (!textIsValid) {
+      onInvalidInputAnimation.start(
+        { x: [40, -10, 40, -5, 0] },
+        { type: "spring", bounce: 0.7 }
+      );
+
+      return;
+    }
 
     const splittedText = splitTaskTextToMultiLine(text!);
 
@@ -117,6 +130,7 @@ function TaskItemLogic({
   const clearSetTimeoutHandler = () => {
     delayRef.current && clearTimeout(delayRef.current);
   };
+
   return {
     isHovering,
     isEditing,
@@ -134,6 +148,7 @@ function TaskItemLogic({
     endHoverHandler,
     toggleDoneTaskHandler,
     clearSetTimeoutHandler,
+    scope,
   };
 }
 

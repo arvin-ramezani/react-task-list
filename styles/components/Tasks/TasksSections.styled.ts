@@ -24,6 +24,7 @@ export const TasksListParagraph = styled.p`
 export const TasksContainer = styled.div`
   margin-top: 2rem;
   display: grid;
+  row-gap: 6rem;
 
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;

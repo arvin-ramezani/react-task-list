@@ -5,6 +5,7 @@ import React, {
   RefObject,
 } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { AnimatePresence, motion } from "framer-motion";
 
 import {
   DropPlaceHolder,
@@ -15,10 +16,15 @@ import {
   StyledTextArea,
   TaskItemText,
   TaskItemWrapper,
-} from "../../../../styles/components/Tasks/TaskItem.styled";
-import DeleteTaskConfirmModal from "../DeleteTaskConfirmModal/DeleteTaskConfirmModal";
-import CheckBox from "../../ui/CheckBox";
-import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
+} from "../../../../../styles/components/Tasks/TaskItem.styled";
+import DeleteTaskConfirmModal from "../../DeleteTaskConfirmModal/DeleteTaskConfirmModal";
+import CheckBox from "../../../ui/CheckBox";
+import { ITask, TaskStatus } from "../../../../../utils/types/tasks.types";
+import {
+  addTaskBtnVariants,
+  removeTaskBtnVariants,
+  textareaVariants,
+} from "./ShowModeTaskItem.variants";
 
 export interface ShowModeTaskItemProps {
   onStartHover: () => void;
@@ -81,6 +87,7 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            // animate={{ opacity: [0, 0.8, 1] }}
             onMouseEnter={onStartHover}
             onMouseLeave={onEndHover}
             aria-label={`${status} task item`}
@@ -96,14 +103,16 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
               $dragging={snapshot.isDragging ? "true" : "false"}
               $draggable="true"
             >
-              {showDeleteModal && (
-                <DeleteTaskConfirmModal
-                  status={status}
-                  onCancel={onCancelDelete}
-                  onConfirm={onConfirmDelete}
-                  id={id.toString()}
-                />
-              )}
+              <AnimatePresence>
+                {showDeleteModal && (
+                  <DeleteTaskConfirmModal
+                    status={status}
+                    onCancel={onCancelDelete}
+                    onConfirm={onConfirmDelete}
+                    id={id.toString()}
+                  />
+                )}
+              </AnimatePresence>
 
               <div>
                 <CheckBox
@@ -118,14 +127,25 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
               {isEditing ? (
                 <StyledTextArea
                   ref={inputRef}
+                  key={"taskItemTextarea"}
                   onChange={onEditInputChange}
                   name={`editTask${id}`}
                   $status={status}
                   aria-label="edit task"
+                  variants={textareaVariants}
+                  initial={"hidden"}
+                  animate={"show"}
+                  exit={"hidden"}
                 />
               ) : (
                 <TaskItemText
                   data-testid="task text"
+                  key={"taskItemText"}
+                  as={motion.p}
+                  variants={textareaVariants}
+                  initial={"hidden"}
+                  animate={"show"}
+                  exit={"hidden"}
                   onClick={onEditTaskClick}
                   $status={status}
                 >
@@ -135,25 +155,51 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
 
               {isEditing && (
                 <EditActionsBlock $status={status}>
-                  <button onClick={onCancelEdit}>Cancel</button>
+                  <motion.button
+                    variants={addTaskBtnVariants}
+                    initial={"initial"}
+                    animate={"animate"}
+                    whileHover={"hover"}
+                    whileTap={"tap"}
+                    transition={{ duration: 0.8 }}
+                    onClick={onCancelEdit}
+                  >
+                    Cancel
+                  </motion.button>
 
-                  <EditBtn onClick={onEdit} $status={status}>
+                  <EditBtn
+                    variants={addTaskBtnVariants}
+                    initial={"initial"}
+                    animate={"animate"}
+                    whileHover={"hover"}
+                    whileTap={"tap"}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                    onClick={onEdit}
+                    $status={status}
+                  >
                     Edit
                   </EditBtn>
                 </EditActionsBlock>
               )}
 
-              {!isEditing && isHovering && (
-                <RemoveTask
-                  aria-label="delete task item"
-                  data-testid="delete-icon"
-                  onClick={onDeleteClick}
-                  $status={status}
-                  data-cy={`${status}-delete-item-${id.toString()}`}
-                >
-                  <span>🗙</span>
-                </RemoveTask>
-              )}
+              <AnimatePresence>
+                {!isEditing && isHovering && (
+                  <RemoveTask
+                    as={motion.div}
+                    variants={removeTaskBtnVariants}
+                    initial={"hidden"}
+                    animate={"show"}
+                    exit={"hidden"}
+                    aria-label="delete task item"
+                    data-testid="delete-icon"
+                    onClick={onDeleteClick}
+                    $status={status}
+                    data-cy={`${status}-delete-item-${id.toString()}`}
+                  >
+                    <span>🗙</span>
+                  </RemoveTask>
+                )}
+              </AnimatePresence>
             </StyledTaskItem>
           </TaskItemWrapper>
         );

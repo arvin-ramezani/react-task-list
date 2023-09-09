@@ -1,6 +1,7 @@
 import React from "react";
-
+import { motion } from "framer-motion";
 import { StrictModeDroppable as Droppable } from "../../DragDrop/strictModeDroppable";
+
 import { TaskStatus, ITask } from "../../../../utils/types/tasks.types";
 import {
   StyledTasksList,
@@ -10,6 +11,10 @@ import {
 } from "../../../../styles/components/Tasks/TasksList.styled";
 import TaskItem from "../TaskItem/TaskItem";
 import AddTask from "../AddTask/AddTask";
+import {
+  tasksLengthVariants,
+  tasksLengthWrapperVariants,
+} from "./TasksList.variants";
 
 interface TasksListProps {
   tasksList: ITask[];
@@ -31,7 +36,22 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
           <TasksListHeader>
             <TasksListTitle $status={status}>{title}</TasksListTitle>
 
-            <TasksLength $status={status}>{tasksList.length} Tasks</TasksLength>
+            <TasksLength
+              variants={tasksLengthWrapperVariants}
+              initial={"initial"}
+              animate={"animate"}
+              $status={status}
+            >
+              <motion.span
+                key={`${status}-list-${tasksList.length}`}
+                variants={tasksLengthVariants}
+                initial={"initial"}
+                animate={"animate"}
+              >
+                {tasksList.length}{" "}
+              </motion.span>
+              Tasks
+            </TasksLength>
           </TasksListHeader>
 
           {tasksList.map((task, index) => (
