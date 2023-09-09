@@ -15,7 +15,6 @@ export const StyledDeleteTask = styled(motion.div)<{ $status: TaskStatus }>`
   z-index: 1;
   font-size: 0.75rem;
   font-weight: 600;
-  /* background-color: #fff; */
 
   background-color: ${({ theme, $status }) => theme.colors[$status].background};
 

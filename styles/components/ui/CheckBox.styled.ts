@@ -1,7 +1,7 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
-import { motion } from "framer-motion";
 
 export const StyledLabel = styled.label<{
   disabled?: boolean;

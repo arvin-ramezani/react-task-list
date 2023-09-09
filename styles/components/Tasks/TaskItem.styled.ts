@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-
-import { TaskStatus } from "../../../utils/types/tasks.types";
 import {
   DraggableStateSnapshot,
   DraggingStyle,
   NotDraggingStyle,
 } from "react-beautiful-dnd";
+
+import { TaskStatus } from "../../../utils/types/tasks.types";
 
 export const StyledMotionTaskItem = styled(motion.article)`
   position: relative;
@@ -157,10 +157,7 @@ export const RemoveTask = styled(motion.div)<{ $status: TaskStatus }>`
 
   transform: translateY(-50%);
   cursor: pointer;
-  /* font-size: 12px; */
   font-weight: 500;
-  /* width: 24px;
-  height: 24px; */
   border-radius: 50%;
   background: transparent;
   padding-right: 0;

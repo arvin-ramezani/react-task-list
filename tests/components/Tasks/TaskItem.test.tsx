@@ -36,7 +36,7 @@ describe("<TaskItem />", () => {
 
     await user.hover(taskItem);
 
-    expect(screen.getByTestId("delete-icon")).toBeInTheDocument();
+    expect(await screen.findByTestId("delete-icon")).toBeInTheDocument();
   });
 
   it("Should have checked checkbox and line-through style for 'done' task item", async () => {

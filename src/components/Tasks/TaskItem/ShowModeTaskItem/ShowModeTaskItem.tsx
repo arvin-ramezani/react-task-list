@@ -233,11 +233,7 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
                 </EditActionsBlock>
               )}
 
-              <AnimatePresence>
-                {/* {!isEditing && isHovering && removeTaskIcon} */}
-
-                {removeTaskIcon}
-              </AnimatePresence>
+              <AnimatePresence>{removeTaskIcon}</AnimatePresence>
             </StyledTaskItem>
           </TaskItemWrapper>
         );

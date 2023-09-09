@@ -19,13 +19,11 @@ const useWindowDimensions = (): WindowDimensions => {
     }
 
     const timerId = setTimeout(() => {
-      console.log("handleResize");
       handleResize();
       window.addEventListener("resize", handleResize);
     }, 1000);
 
     return (): void => {
-      console.log("cleanup");
       clearTimeout(timerId);
       window.removeEventListener("resize", handleResize);
     };
