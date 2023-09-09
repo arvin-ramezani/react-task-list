@@ -152,8 +152,9 @@ export const RemoveTask = styled(motion.div)<{ $status: TaskStatus }>`
   align-items: center;
   justify-content: center;
   position: absolute;
-  right: 10px;
-  top: 50%;
+  right: -10px;
+  top: 0px;
+
   transform: translateY(-50%);
   cursor: pointer;
   /* font-size: 12px; */
@@ -162,7 +163,6 @@ export const RemoveTask = styled(motion.div)<{ $status: TaskStatus }>`
   height: 24px; */
   border-radius: 50%;
   background: transparent;
-  padding: 0.5rem;
   padding-right: 0;
 
   color: ${({ theme, $status }) => theme.colors[$status].borderColor};
@@ -170,5 +170,11 @@ export const RemoveTask = styled(motion.div)<{ $status: TaskStatus }>`
   & > svg {
     width: 20px;
     height: 20px;
+  }
+
+  @media (min-width: "768px") {
+    right: 10px;
+    top: 50%;
+    padding: 0.5rem;
   }
 `;

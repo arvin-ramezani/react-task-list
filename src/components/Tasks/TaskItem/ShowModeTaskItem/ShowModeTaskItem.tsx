@@ -27,6 +27,7 @@ import {
   removeTaskBtnVariants,
   textareaVariants,
 } from "./ShowModeTaskItem.variants";
+import useWindowDimensions from "../../../../hooks/use-dimensions";
 
 export interface ShowModeTaskItemProps {
   onStartHover: () => void;
@@ -73,6 +74,53 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
   text,
   index,
 }) => {
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+
+  let removeTaskIcon: React.ReactElement;
+  if (windowWidth && windowWidth < 768) {
+    // Remove task icon in mobile size
+    removeTaskIcon = (
+      <RemoveTask
+        as={motion.div}
+        variants={removeTaskBtnVariants}
+        initial={"hidden"}
+        animate={"show"}
+        exit={"hidden"}
+        whileHover={"hover"}
+        whileTap={"tap"}
+        custom={windowWidth < 768}
+        aria-label="delete task item"
+        data-testid="delete-icon"
+        onClick={onDeleteClick}
+        $status={status}
+        data-cy={`${status}-delete-item-${id.toString()}`}
+      >
+        <MdClose />
+      </RemoveTask>
+    );
+
+    // Remove task icon in tablet and laptop sizes,
+  } else if (windowWidth && windowWidth > 768 && !isEditing && isHovering) {
+    removeTaskIcon = (
+      <RemoveTask
+        as={motion.div}
+        variants={removeTaskBtnVariants}
+        initial={"hidden"}
+        animate={"show"}
+        exit={"hidden"}
+        whileHover={"hover"}
+        whileTap={"tap"}
+        aria-label="delete task item"
+        data-testid="delete-icon"
+        onClick={onDeleteClick}
+        $status={status}
+        data-cy={`${status}-delete-item-${id.toString()}`}
+      >
+        <MdClose />
+      </RemoveTask>
+    );
+  }
+
   return (
     <Draggable
       shouldRespectForcePress
@@ -186,24 +234,9 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
               )}
 
               <AnimatePresence>
-                {!isEditing && isHovering && (
-                  <RemoveTask
-                    as={motion.div}
-                    variants={removeTaskBtnVariants}
-                    initial={"hidden"}
-                    animate={"show"}
-                    exit={"hidden"}
-                    aria-label="delete task item"
-                    data-testid="delete-icon"
-                    onClick={onDeleteClick}
-                    $status={status}
-                    data-cy={`${status}-delete-item-${id.toString()}`}
-                  >
-                    <MdClose />
-                    {/* <span>&#128473;</span> */}
-                    {/* <span>🗙</span> */}
-                  </RemoveTask>
-                )}
+                {/* {!isEditing && isHovering && removeTaskIcon} */}
+
+                {removeTaskIcon}
               </AnimatePresence>
             </StyledTaskItem>
           </TaskItemWrapper>
