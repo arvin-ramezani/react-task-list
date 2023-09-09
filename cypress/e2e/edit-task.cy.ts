@@ -14,7 +14,7 @@ describe("user can edit task", () => {
     cy.get("@todoList").find("article").should("have.length", todoItemsLength);
 
     cy.get("[data-cy='todo-task-item-1']").click().as("taskToEdit");
-    cy.get("@taskToEdit").get("textarea").click().clear();
+    cy.get("@taskToEdit").find("textarea").click().clear();
 
     const editText = "Edit Task";
 
