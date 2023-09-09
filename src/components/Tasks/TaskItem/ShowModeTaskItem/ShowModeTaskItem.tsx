@@ -16,6 +16,7 @@ import {
   StyledTextArea,
   TaskItemText,
   TaskItemWrapper,
+  getStyle,
 } from "../../../../../styles/components/Tasks/TaskItem.styled";
 import DeleteTaskConfirmModal from "../../DeleteTaskConfirmModal/DeleteTaskConfirmModal";
 import CheckBox from "../../../ui/CheckBox";
@@ -87,7 +88,8 @@ const ShowModeTaskItem: FC<ShowModeTaskItemProps> = ({
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            // animate={{ opacity: [0, 0.8, 1] }}
+            $isDragging={snapshot.isDragging && !snapshot.isDropAnimating}
+            style={getStyle(provided.draggableProps.style, snapshot)}
             onMouseEnter={onStartHover}
             onMouseLeave={onEndHover}
             aria-label={`${status} task item`}

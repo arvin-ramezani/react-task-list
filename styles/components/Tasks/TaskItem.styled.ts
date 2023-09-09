@@ -2,16 +2,37 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 import { TaskStatus } from "../../../utils/types/tasks.types";
+import {
+  DraggableStateSnapshot,
+  DraggingStyle,
+  NotDraggingStyle,
+} from "react-beautiful-dnd";
 
 export const StyledMotionTaskItem = styled(motion.article)`
   position: relative;
   background-color: transparent;
 `;
 
-export const TaskItemWrapper = styled.article`
+export const TaskItemWrapper = styled.article<{ $isDragging?: boolean }>`
   position: relative;
   background-color: transparent;
 `;
+
+export function getStyle(
+  style: DraggingStyle | NotDraggingStyle | undefined,
+  snapshot: DraggableStateSnapshot
+) {
+  if (!snapshot.isDropAnimating) {
+    return style;
+  }
+
+  return {
+    ...style,
+    transition: `all .6s ease`,
+    transitionDelay: ".1s",
+    // backgroundColor: "blue",
+  };
+}
 
 export const StyledTaskItem = styled.div<{
   $status: TaskStatus;
@@ -26,7 +47,7 @@ export const StyledTaskItem = styled.div<{
   padding: 12px 10px;
   border-radius: 4px;
   position: relative;
-  transition: transform 0.3s;
+  transition: rotate 0.8s;
 
   cursor: ${({ $draggable }) => ($draggable === "true" ? "grab" : "default")};
   rotate: ${({ $dragging }) => ($dragging === "true" ? "-3deg" : "0")};
