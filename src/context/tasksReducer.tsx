@@ -1,4 +1,3 @@
-import { saveToLocalStorage } from "../../utils/helpers/localStorage";
 import {
   getAddTaskState,
   getDeleteTaskState,
@@ -7,7 +6,6 @@ import {
   getEditTaskState,
   getUndoneTaskState,
 } from "../../utils/helpers/taskReducerHelpers";
-import { LocalStorageDataName } from "../../utils/types/common.types";
 import {
   IInitialTasksState,
   ReducerActionType,
@@ -40,7 +38,6 @@ export const tasksReducer = (
         doneList: payload.doneList,
       };
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, addAllState);
       return addAllState;
 
     case TasksReducerActionTypes.DONE_TASK:
@@ -55,11 +52,6 @@ export const tasksReducer = (
       }
 
       const doneState = getDoneTaskState(state, payload.id);
-
-      saveToLocalStorage(LocalStorageDataName.TASKS, {
-        ...state,
-        ...doneState,
-      });
 
       return { ...state, ...doneState };
 
@@ -76,19 +68,16 @@ export const tasksReducer = (
 
       const undoneState = getUndoneTaskState(state, payload.id);
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, undoneState);
       return undoneState;
 
     case TasksReducerActionTypes.EDIT_TASK:
       const editedState = getEditTaskState(state, payload);
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, editedState);
       return editedState;
 
     case TasksReducerActionTypes.DELETE_TASK:
       const deleteState = getDeleteTaskState(state, payload.id);
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, deleteState);
       return deleteState;
 
     case TasksReducerActionTypes.ADD_TASK:
@@ -97,7 +86,6 @@ export const tasksReducer = (
         status: payload.status,
       });
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, addState);
       return addState;
 
     case TasksReducerActionTypes.DRAG_DROP:
@@ -111,13 +99,11 @@ export const tasksReducer = (
         destinationIndex,
       });
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, dragDropState);
       return dragDropState;
 
     case TasksReducerActionTypes.SET_IS_DRAGGING:
       const idDraggingState = { ...state, isDragging: payload.isDragging };
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, idDraggingState);
       return idDraggingState;
 
     case TasksReducerActionTypes.CLEAR_WAIT_LIST:
@@ -133,7 +119,6 @@ export const tasksReducer = (
         };
       }
 
-      saveToLocalStorage(LocalStorageDataName.TASKS, clearWaitListState);
       return clearWaitListState;
 
     default:
