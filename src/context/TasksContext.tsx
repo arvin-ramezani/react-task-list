@@ -31,7 +31,6 @@ const useTasksContext = (initialState: IInitialTasksState) => {
   const [state, dispatch] = useReducer(tasksReducer, initialState);
 
   useEffect(() => {
-    console.log("tasksContext", state);
     saveToLocalStorage(LocalStorageDataName.TASKS, state);
   }, [state]);
 
