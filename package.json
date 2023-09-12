@@ -14,7 +14,6 @@
   "author": "Arvin Ramezani <arvin.ramezani6@gmail.com> (arvin.ramezani6@gmail.com)",
   "license": "ISC",
   "devDependencies": {
-    "@4tw/cypress-drag-drop": "^2.2.4",
     "@babel/cli": "^7.22.10",
     "@babel/core": "7.22.11",
     "@babel/preset-env": "7.22.10",
@@ -34,7 +33,7 @@
     "babel-loader": "9.1.3",
     "babel-plugin-styled-components": "^2.1.4",
     "css-loader": "6.8.1",
-    "cypress": "^13.1.0",
+    "cypress": "^13.2.0",
     "cypress-real-events": "^1.10.1",
     "eslint-plugin-cypress": "^2.14.0",
     "file-loader": "6.2.0",
@@ -57,5 +56,10 @@
     "react-beautiful-dnd": "^13.1.1",
     "react-icons": "^4.11.0",
     "styled-components": "5.3.3"
+  },
+  "overrides": {
+    "@testing-library/cypress": {
+      "cypress": "^13.0.0"
+    }
   }
 }
