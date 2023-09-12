@@ -6,9 +6,23 @@ This repository contains a simple Todo List application built using ReactJS and 
 
 To run the application locally, please make sure you have Node.js installed. The recommended version of Node.js for this project is 18.17.1 Follow these steps:
 
-1. Clone the repository: `git clone https://github.com/arvin-ramezani/react-task-list`
-2. Navigate to the project directory: `cd react-task-list`
-3. Install the dependencies: `npm install --legacy-peer-deps`
+1. Clone the repository:
+
+```
+git clone https://github.com/arvin-ramezani/react-task-list
+```
+
+2. Navigate to the project directory:
+
+```
+cd react-task-list
+```
+
+3. Install the dependencies:
+
+```
+npm install
+```
 
 ## Development
 
