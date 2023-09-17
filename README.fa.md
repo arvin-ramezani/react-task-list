@@ -1,12 +1,12 @@
 <table>
     <td>
-    <a href="README.fa.md">
-       &#10003; Persian
-    </a>
-    </td>
-    <td>
         <a href="README.md">
             English
+        </a>
+    </td>
+    <td>
+        <a href="README.fa.md">
+        &#10003; Persian
         </a>
     </td>
 </table>
