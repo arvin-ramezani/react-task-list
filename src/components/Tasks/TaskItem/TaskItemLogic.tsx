@@ -1,17 +1,17 @@
-import { MouseEventHandler, useRef, useState } from "react";
-import { AnimationControls } from "framer-motion";
-import { useAnimate } from "framer-motion";
+import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { AnimationControls } from 'framer-motion';
+import { useAnimate } from 'framer-motion';
 
-import { useTasks } from "../../../context/TasksContext";
-import { ITask, TaskStatus } from "../../../../utils/types/tasks.types";
-import { validateTaskText } from "../../../../utils/helpers/validate";
-import { splitTaskTextToMultiLine } from "../../../../utils/helpers/splitMultilineTaskText";
+import { useTasks } from '../../../context/TasksContext';
+import { ITask, TaskStatus } from '../../../../utils/types/tasks.types';
+import { validateTaskText } from '../../../../utils/helpers/validate';
+import { splitTaskTextToMultiLine } from '../../../../utils/helpers/splitMultilineTaskText';
 
 interface ITaskItemLogic {
   addMode?: boolean;
-  status: ITask["status"];
-  id: ITask["id"];
-  text: ITask["text"];
+  status: ITask['status'];
+  id: ITask['id'];
+  text: ITask['text'];
   onExitAddMode?: () => void;
   onInvalidInputAnimation: AnimationControls;
 }
@@ -33,7 +33,8 @@ function TaskItemLogic({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [scope, animate] = useAnimate();
 
-  const delayRef = useRef<number>(null);
+  // const delayRef = useRef<number>(null);
+  const delayRef = useRef<NodeJS.Timeout>(null);
 
   const confirmDeleteHandler = () => {
     deleteTask({ id });
@@ -60,7 +61,7 @@ function TaskItemLogic({
     if (!textIsValid) {
       onInvalidInputAnimation.start(
         { x: [40, -10, 40, -5, 0] },
-        { type: "spring", bounce: 0.7 }
+        { type: 'spring', bounce: 0.7 }
       );
 
       return;
@@ -80,7 +81,7 @@ function TaskItemLogic({
   const editTaskHandler = () => {
     if (
       !inputRef.current ||
-      inputRef.current.value.trim() === "" ||
+      inputRef.current.value.trim() === '' ||
       inputRef.current.value === text
     )
       return setIsEditing(false);
@@ -112,11 +113,12 @@ function TaskItemLogic({
     return setIsHovering(() => false);
   };
 
+  // Start a new timeout to handle the task completion
   const toggleDoneTaskHandler = () => {
     setIsDone((prev) => !prev);
-
     clearSetTimeoutHandler();
 
+    // Start a new timeout to handle the task completion
     // @ts-ignore
     delayRef.current = setTimeout(() => {
       if (isDone) {
@@ -127,9 +129,37 @@ function TaskItemLogic({
     }, 3000);
   };
 
+  // const toggleDoneTaskHandler = () => {
+  //   setIsDone((prev) => !prev);
+
+  //   clearSetTimeoutHandler();
+
+  //   // @ts-ignore
+  //   delayRef.current = setTimeout(() => {
+  //     if (isDone) {
+  //       doneTask({ id, currentStatus: status });
+  //     } else {
+  //       undoneTask({ id });
+  //     }
+  //   }, 3000);
+  // };
+
   const clearSetTimeoutHandler = () => {
-    delayRef.current && clearTimeout(delayRef.current);
+    if (delayRef.current) {
+      clearTimeout(delayRef.current);
+
+      // @ts-ignore
+      delayRef.current = null;
+    }
   };
+
+  // const clearSetTimeoutHandler = () => {
+  //   delayRef.current && clearTimeout(delayRef.current);
+  // };
+
+  useEffect(() => {
+    return () => clearSetTimeoutHandler();
+  }, []);
 
   return {
     isHovering,
