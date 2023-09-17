@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
-import styled from "styled-components";
+import { motion } from 'framer-motion';
+import styled from 'styled-components';
 
 export const StyledTasksListHeader = styled(motion.header)`
   width: 80%;
@@ -10,6 +10,12 @@ export const TasksListHeading = styled(motion.h1)`
   font-size: 2rem;
   font-weight: bold;
   margin: 1rem 0;
+
+  & span {
+    font-size: 2.2rem;
+    color: blue;
+    margin-right: 0.1rem;
+  }
 `;
 
 export const TasksListSubHeading = styled(motion.p)`

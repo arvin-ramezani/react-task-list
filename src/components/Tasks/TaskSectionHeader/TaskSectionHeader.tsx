@@ -1,30 +1,31 @@
-import React from "react";
+import React from 'react';
 
 import {
   TasksListHeading,
   TasksListSubHeading,
   TasksListParagraph,
-} from "../../../../styles/components/Tasks/TasksSections.styled";
-import { StyledTasksListHeader } from "../../../../styles/components/Tasks/TasksSections.styled";
-import { Variants } from "framer-motion";
+} from '../../../../styles/components/Tasks/TasksSections.styled';
+import { StyledTasksListHeader } from '../../../../styles/components/Tasks/TasksSections.styled';
+import { Variants } from 'framer-motion';
 import {
   headerItemsVariants,
   headerVariants,
-} from "./TaskSectionHeader.variants";
+} from './TaskSectionHeader.variants';
 
 function TaskListHeader() {
   return (
     <StyledTasksListHeader
       variants={headerVariants}
-      initial={"initial"}
-      animate={"animate"}
+      initial={'initial'}
+      animate={'animate'}
       transition={{ duration: 0.6, staggerChildren: 0.2 }}
     >
       <TasksListHeading
         variants={headerItemsVariants}
         transition={{ duration: 0.6 }}
       >
-        ✔️Task List
+        <span>&#10003;</span>
+        Task List
       </TasksListHeading>
 
       <TasksListSubHeading
