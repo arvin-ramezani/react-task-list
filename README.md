@@ -1,6 +1,23 @@
 # Simple Todo List
 
-This repository contains a simple Todo List application built using ReactJS and Styled-Components with Drag Drop feature.
+This repository contains a simple Todo List application built using ReactJS, TypeScript, Styled-Components, react-beautiful-dnd, and Framer Motion for animation. The application includes a drag and drop feature implemented with react-beautiful-dnd, allowing users to easily organize their tasks in three states: Todo, Doing, and Done.
+
+## My Journey and Challenges
+
+During this interview practice, I was assigned a task to implement an automatic movement of tasks to the "Done" or "Todo" List after three seconds when a user checked
+the checkbox to mark a task as "done" or "undone". However, a challenge arose when users attempted to drag and hold a task after clicking on "done" or "undone" and
+only releasing it after three seconds. This posed an issue as the index of the task list would change during this process, which caused an error to be thrown due to
+the dependency of "react-beautiful-dnd" on the index values.
+
+I utilize the Context API and the useReducer hook for managing the application state. For solving this problem, I created a new state within the context called "isDragging"
+and set it to "true" in the onDragStartHandler() function. Similarly, I set it to "false" in the onDragEndHandler() function.
+
+In order to handle the scenario mentioned above, I modified the "toggleDone" reducer. Now, when "state.isDragging" is true, I save the entire action object { type, payload }
+into a new state called "taskList."
+
+Additionally, I implemented a useEffect hook, where I added "isDragging" to its dependency array. This allowed me to check for changes in "isDragging" and take action accordingly. Whenever "isDragging" changes and its value becomes false, I dispatch an action called "clearWaitList" within the reducer.
+
+The purpose of the "clearWaitList" action is to iterate through each saved action object within the "waitList" and dispatch them one by one, while simultaneously removing them from the list.
 
 ## Installation
 
