@@ -1,7 +1,7 @@
 <table>
     <td>
     <a href="README.fa.md">
-        Persian
+       &#10003; Persian
     </a>
     </td>
     <td>

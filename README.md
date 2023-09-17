@@ -6,7 +6,7 @@
     </td>
     <td>
         <a href="README.md">
-            English
+           &#10003; English
         </a>
     </td>
 </table>
