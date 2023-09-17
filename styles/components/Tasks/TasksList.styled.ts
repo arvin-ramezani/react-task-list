@@ -1,15 +1,16 @@
-import styled from "styled-components";
-import { motion } from "framer-motion";
+import styled from 'styled-components';
+import { motion } from 'framer-motion';
 
-import { TaskStatus } from "../../../utils/types/tasks.types";
+import { TaskStatus } from '../../../utils/types/tasks.types';
 
 export const StyledTasksList = styled(motion.section)<{ $status: TaskStatus }>`
   padding: 20px 20px 40px 20px;
   border-radius: 10px;
-  margin: 2rem 0;
+  margin: 2rem auto;
   position: relative;
   min-height: 80px;
   height: 100%;
+  width: 340px;
 
   background-color: ${({ $status, theme }) => theme.colors[$status].background};
 `;
