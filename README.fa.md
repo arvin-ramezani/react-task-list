@@ -13,24 +13,22 @@
 
 # Simple Todo List
 
-This repository contains a simple Todo List application built using ReactJS, TypeScript, Styled-Components, react-beautiful-dnd, and Framer Motion for animation. The application includes a drag and drop feature implemented with react-beautiful-dnd, allowing users to easily organize their tasks in three states: Todo, Doing, and Done.
+این ریپازیتوری شامل یک برنامه ساده Todo List است که با استفاده از ReactJS، TypeScript، Styled-Components، react-beautiful-dnd و Framer Motion برای انیمیشن ساخته شده است. این برنامه شامل ویژگی Drag و Drop است که با react-beautiful-dnd پیاده سازی شده است و به کاربران این امکان را می دهد تا به راحتی تسک های خود را در سه حالت سازماندهی کنند: Todo، Doing و Done.
 
 ## My Journey and Challenges
 
-During this interview practice, I was assigned a task to implement an automatic movement of tasks to the "Done" or "Todo" List after three seconds when a user checked
-the checkbox to mark a task as "done" or "undone". However, a challenge arose when users attempted to drag and hold a task after clicking on "done" or "undone" and
-only releasing it after three seconds. This posed an issue as the index of the task list would change during this process, which caused an error to be thrown due to
-the dependency of "react-beautiful-dnd" on the index values.
+این یک تست مصاحبه بود که باید به شکلی انجام میشد که پس از کلیک کاربر روی چک باکس، بعد از سه ثانیه تسک مربوطه به 'Done" یا 'Undone" تغییر میکرد.
+در سناریویی که کاربر پس از کلیک کردن روی تسک، هر آیتم دیگری را 'Drag' کند و بعد از سه ثانیه آن را 'Drop' کند، برنامه ارور میداد.
+علت آن هم این بود که چون react-beautiful-dnd از index استفاده می کند و بین زمان 'Drag' و 'Drop' کردن index لیست به علت تغییر وضعیت تسک کلیک شده تغییر خواهد کرد باعث ایجاد ارور تو برنامه می شد.
 
-I utilize the Context API and the useReducer hook for managing the application state. For solving this problem, I created a new state within the context called "isDragging"
-and set it to "true" in the onDragStartHandler() function. Similarly, I set it to "false" in the onDragEndHandler() function.
+از اونجایی که برای مدیریت استیت ها من از Context API و useReducer استفاده کرده بودم برای حل مشکل تصمیم گرفتم،
 
-In order to handle the scenario mentioned above, I modified the "toggleDone" reducer. Now, when "state.isDragging" is true, I save the entire action object { type, payload }
-into a new state called "taskList."
+در استیت های Context یک متغیر به اسم 'isDragging' تعریف کردم و آن را به ترتیب در فانکشن های 'onDragStart' و 'onDragEnd' برابر 'true' و 'false' قرار دادم.
 
-Additionally, I implemented a useEffect hook, where I added "isDragging" to its dependency array. This allowed me to check for changes in "isDragging" and take action accordingly. Whenever "isDragging" changes and its value becomes false, I dispatch an action called "clearWaitList" within the reducer.
+و در reducer toggleDoneTask چک کردم که اگر 'isDragging' برابر 'true' بود آبجکت action را به طور کامل در استیت دیگری به اسم waitList در Context ذخیره کردم. { type, payload }.
 
-The purpose of the "clearWaitList" action is to iterate through each saved action object within the "waitList" and dispatch them one by one, while simultaneously removing them from the list.
+سپس با استفاده از useEffect و اضافه کردن 'isDragging' به آرایه dependency چک کردم که اگر 'isDragging' برابر 'false' بود action به اسم 'clearWaitList' را dispatch کند.
+سپس در reducer مربوطه درون waitList پیمایش کردم و action ها را تک به تک dispatch کرده و آنها را از لیست پاک میکنم.
 
 ## Installation
 
