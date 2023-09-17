@@ -10,7 +10,7 @@ export const StyledTasksList = styled(motion.section)<{ $status: TaskStatus }>`
   position: relative;
   min-height: 80px;
   height: 100%;
-  width: 90%;
+  width: 85%;
   max-width: 340px;
 
   background-color: ${({ $status, theme }) => theme.colors[$status].background};
