@@ -1,20 +1,20 @@
-import React from "react";
-import { Variants, motion } from "framer-motion";
-import { StrictModeDroppable as Droppable } from "../../DragDrop/strictModeDroppable";
+import React from 'react';
+import { Variants, motion } from 'framer-motion';
+import { StrictModeDroppable as Droppable } from '../../DragDrop/strictModeDroppable';
 
-import { TaskStatus, ITask } from "../../../../utils/types/tasks.types";
+import { TaskStatus, ITask } from '../../../../utils/types/tasks.types';
 import {
   StyledTasksList,
   TasksLength,
   TasksListHeader,
   TasksListTitle,
-} from "../../../../styles/components/Tasks/TasksList.styled";
-import TaskItem from "../TaskItem/TaskItem";
-import AddTask from "../AddTask/AddTask";
+} from '../../../../styles/components/Tasks/TasksList.styled';
+import TaskItem from '../TaskItem/TaskItem';
+import AddTask from '../AddTask/AddTask';
 import {
   tasksLengthVariants,
   tasksLengthWrapperVariants,
-} from "./TasksList.variants";
+} from './TasksList.variants';
 
 export const taskListVariants: Variants = {
   initial: { opacity: 0 },
@@ -33,7 +33,10 @@ interface TasksListProps {
 
 function TasksList({ tasksList, title, status }: TasksListProps) {
   return (
-    <Droppable key={status} droppableId={status}>
+    <Droppable
+      key={status}
+      droppableId={status}
+    >
       {(provided, snapshot) => (
         <StyledTasksList
           variants={taskListVariants}
@@ -48,27 +51,35 @@ function TasksList({ tasksList, title, status }: TasksListProps) {
 
             <TasksLength
               variants={tasksLengthWrapperVariants}
-              initial={"initial"}
-              animate={"animate"}
+              initial={'initial'}
+              animate={'animate'}
               $status={status}
             >
               <motion.span
                 key={`${status}-list-${tasksList.length}`}
                 variants={tasksLengthVariants}
-                initial={"initial"}
-                animate={"animate"}
+                initial={'initial'}
+                animate={'animate'}
               >
-                {tasksList.length}{" "}
+                {tasksList.length}{' '}
               </motion.span>
               Tasks
             </TasksLength>
           </TasksListHeader>
 
           {tasksList.map((task, index) => (
-            <TaskItem index={index} key={task.id} {...task} addMode={false} />
+            <TaskItem
+              index={index}
+              key={task.id}
+              {...task}
+              addMode={false}
+            />
           ))}
 
-          <AddTask absolutePosition={snapshot.isDraggingOver} status={status} />
+          <AddTask
+            absolutePosition={snapshot.isDraggingOver}
+            status={status}
+          />
 
           {provided.placeholder}
         </StyledTasksList>

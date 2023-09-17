@@ -74,6 +74,14 @@ Git and GitHub are used for version control in this project. A feature developme
 
 For documenting components, I suggest using a tool like Storybook. Storybook provides a development environment for UI components, allowing you to document, test, and showcase your components in isolation. It facilitates collaboration and helps maintain a consistent and up-to-date component library.
 
+## Deployment
+
+The application has been deployed using Vercel and can be accessed:
+<br />
+<a href="https://react-task-list-rho.vercel.app/">
+(https://react-task-list-rho.vercel.app/)
+</a>
+
 ## Additional Suggestions
 
 I think it would be great if we use libraries like "framer-motion" to create engagement and complex animations.
