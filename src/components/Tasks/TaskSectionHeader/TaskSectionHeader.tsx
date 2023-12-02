@@ -26,6 +26,7 @@ function TaskListHeader() {
       >
         <span>&#10003;</span>
         Task List
+        <span>&#10003;</span>
       </TasksListHeading>
 
       <TasksListSubHeading
